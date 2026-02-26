@@ -352,6 +352,202 @@
     text-transform: uppercase;
     letter-spacing: 0.08em;
   }
+
+  /* ── PROJECT TRACKER ── */
+  .project-tracker {
+    margin: 1.5rem 1.2rem 0;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+
+  .tracker-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.85rem 1rem;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .tracker-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+  }
+
+  .tracker-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 0.1rem;
+  }
+
+  .tracker-chevron {
+    font-size: 0.7rem;
+    color: var(--muted);
+    transition: transform 0.25s;
+  }
+
+  .tracker-chevron.open { transform: rotate(180deg); }
+
+  .tracker-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  .tracker-body.open { max-height: 1000px; }
+
+  .tracker-inner { padding: 0 1rem 1rem; }
+
+  /* active project card */
+  .active-proj {
+    background: #0d0d00;
+    border: 1px solid #2a2800;
+    border-radius: 8px;
+    padding: 0.85rem;
+    margin-bottom: 1rem;
+  }
+
+  .proj-name {
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: var(--accent);
+    margin-bottom: 0.15rem;
+  }
+
+  .proj-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 0.8rem;
+  }
+
+  .stage-row {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.35rem;
+  }
+
+  .stage-bar {
+    display: flex;
+    gap: 0.25rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .seg {
+    flex: 1;
+    height: 5px;
+    border-radius: 3px;
+    background: var(--border);
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .seg.done { background: var(--accent2); }
+  .seg.current { background: var(--accent); }
+
+  .stage-name {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.75rem;
+  }
+
+  /* tasks */
+  .tasks-heading {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.4rem;
+  }
+
+  .task {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+  }
+
+  .task:last-child { border-bottom: none; }
+
+  .chk {
+    width: 16px;
+    height: 16px;
+    border: 1.5px solid var(--muted);
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.58rem;
+    font-weight: 700;
+    transition: all 0.15s;
+  }
+
+  .chk.on { background: var(--accent2); border-color: var(--accent2); color: #000; }
+
+  .task-txt {
+    font-size: 0.77rem;
+    color: var(--text-dim);
+    line-height: 1.4;
+    flex: 1;
+    transition: all 0.15s;
+  }
+
+  .task.done .task-txt { color: var(--border); text-decoration: line-through; }
+
+  /* other projects */
+  .others-heading {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 1rem 0 0.4rem;
+  }
+
+  .other-proj {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .other-proj:last-child { border-bottom: none; }
+
+  .other-proj-name { font-size: 0.78rem; color: var(--text-dim); }
+
+  .badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.56rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.18rem 0.5rem;
+    border-radius: 10px;
+  }
+
+  .b-building { background: #001a0e; color: var(--accent2); border: 1px solid #003320; }
+  .b-research { background: #0a0a1a; color: #8888ff; border: 1px solid #1e1e5e; }
+  .b-paused   { background: #1a1000; color: #aa7700; border: 1px solid #332200; }
 </style>
 </head>
 <body>
@@ -687,6 +883,41 @@
   </div>
 </div>
 
+<!-- PROJECT TRACKER (rendered once, shown in every day view via JS) -->
+<div class="project-tracker" id="projectTracker" style="display:none">
+  <div class="tracker-header" onclick="toggleTracker()">
+    <div>
+      <div class="tracker-title">⚡ Currently Building</div>
+      <div class="tracker-tag">Tap to expand</div>
+    </div>
+    <div class="tracker-chevron" id="chevron">▼</div>
+  </div>
+  <div class="tracker-body" id="trackerBody">
+    <div class="tracker-inner">
+
+      <!-- ACTIVE PROJECT -->
+      <div class="active-proj">
+        <div class="proj-name">AI-Augmented CI/CD MLOps Pipeline</div>
+        <div class="proj-meta">Target: MLOps · DevOps · AIOps · Cloud</div>
+        <div class="stage-row">Progress — Stage <span id="stageNum">1</span> of 6</div>
+        <div class="stage-bar" id="stageBar"></div>
+        <div class="stage-name" id="stageName">⚙️ Stage 1 — Foundation</div>
+        <div class="tasks-heading">This stage's tasks</div>
+        <div id="taskList"></div>
+      </div>
+
+      <!-- OTHER PROJECTS -->
+      <div class="others-heading">Other projects</div>
+      <div class="other-proj"><span class="other-proj-name">Wardrobe AI</span><span class="badge b-research">Research</span></div>
+      <div class="other-proj"><span class="other-proj-name">Blog — Polylith Web App</span><span class="badge b-building">Writing</span></div>
+      <div class="other-proj"><span class="other-proj-name">ClaudeBot Mac Setup</span><span class="badge b-paused">Pending</span></div>
+      <div class="other-proj"><span class="other-proj-name">OpenClawCmap</span><span class="badge b-paused">Pending</span></div>
+      <div class="other-proj"><span class="other-proj-name">AWS SAA-C03</span><span class="badge b-building">Active</span></div>
+
+    </div>
+  </div>
+</div>
+
 <!-- BOTTOM NAV -->
 <div class="bottom-nav">
   <button class="nav-btn" onclick="prevDay()">← Prev</button>
@@ -695,17 +926,141 @@
 </div>
 
 <script>
+  // ── DATA ──
+  const STAGES = [
+    {
+      name: '⚙️ Stage 1 — Foundation',
+      tasks: [
+        'Choose ML model + dataset',
+        'Train locally, save with joblib',
+        'Wrap in FastAPI endpoint',
+        'Write pytest unit tests',
+        'Dockerize the app',
+        'Verify end-to-end locally'
+      ]
+    },
+    {
+      name: '🔄 Stage 2 — CI/CD Pipeline',
+      tasks: [
+        'Set up GitHub repo structure',
+        'GitHub Actions: test → build → push',
+        'Secrets & env vars management',
+        'Auto-deploy to GCP Cloud Run / AWS'
+      ]
+    },
+    {
+      name: '📊 Stage 3 — MLflow Tracking',
+      tasks: [
+        'Set up MLflow tracking server',
+        'Log experiments: params, metrics',
+        'Register model in Model Registry',
+        'CI/CD pulls registered model version'
+      ]
+    },
+    {
+      name: '📡 Stage 4 — Monitoring',
+      tasks: [
+        'Add Prometheus metrics to FastAPI',
+        'Set up Grafana dashboard',
+        'Add data drift detection (Evidently)',
+        'Alert on accuracy/distribution drift'
+      ]
+    },
+    {
+      name: '🤖 Stage 5 — AIOps Layer',
+      tasks: [
+        'Anomaly detector on build metrics',
+        'Trigger Slack/email alert on drift',
+        'Draw architecture diagram',
+        'Write technical blog post'
+      ]
+    },
+    {
+      name: '🚀 Stage 6 — Polish & Portfolio',
+      tasks: [
+        'Clean GitHub README',
+        'Record 3-min demo video',
+        'LinkedIn post about what shipped',
+        'Interview talking points per component'
+      ]
+    }
+  ];
+
+  const STORAGE_KEY = 'nanthan_project_v1';
+
+  // Load or init state
+  let state = { currentStage: 0, checked: {} };
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) state = JSON.parse(saved);
+  } catch(e) {}
+
+  function saveState() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+  }
+
+  // ── RENDER PROJECT TRACKER ──
+  function renderTracker() {
+    const s = state.currentStage;
+    document.getElementById('stageNum').textContent = s + 1;
+    document.getElementById('stageName').textContent = STAGES[s].name;
+
+    // stage bar
+    const bar = document.getElementById('stageBar');
+    bar.innerHTML = '';
+    STAGES.forEach((_, i) => {
+      const seg = document.createElement('div');
+      seg.className = 'seg' + (i < s ? ' done' : i === s ? ' current' : '');
+      seg.title = STAGES[i].name;
+      seg.onclick = (e) => { e.stopPropagation(); if (confirm('Move to ' + STAGES[i].name + '?')) { state.currentStage = i; saveState(); renderTracker(); } };
+      bar.appendChild(seg);
+    });
+
+    // tasks
+    const list = document.getElementById('taskList');
+    list.innerHTML = '';
+    STAGES[s].tasks.forEach((txt, i) => {
+      const key = s + '_' + i;
+      const checked = !!state.checked[key];
+      const div = document.createElement('div');
+      div.className = 'task' + (checked ? ' done' : '');
+      div.innerHTML = `<div class="chk ${checked ? 'on' : ''}">${checked ? '✓' : ''}</div><div class="task-txt">${txt}</div>`;
+      div.onclick = () => {
+        state.checked[key] = !state.checked[key];
+        saveState();
+        renderTracker();
+      };
+      list.appendChild(div);
+    });
+  }
+
+  function toggleTracker() {
+    const body = document.getElementById('trackerBody');
+    const chev = document.getElementById('chevron');
+    const open = body.classList.toggle('open');
+    chev.classList.toggle('open', open);
+    document.querySelector('.tracker-tag').textContent = open ? 'Tap to collapse' : 'Tap to expand';
+  }
+
+  // ── INJECT TRACKER INTO EACH DAY VIEW ──
+  function injectTracker() {
+    document.querySelectorAll('.day-view').forEach(dv => {
+      if (!dv.querySelector('.project-tracker-slot')) {
+        const slot = document.createElement('div');
+        slot.className = 'project-tracker-slot';
+        dv.appendChild(slot);
+      }
+    });
+  }
+
+  // ── SCHEDULE LOGIC ──
   const DAYS = ['day-0','day-1','day-2','day-3','day-4','day-5','day-6'];
   const DAY_NAMES = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-  // JS getDay() is 0=Sun, 1=Mon ... 6=Sat
-  // Our index: 0=Mon, 1=Tue, 2=Wed, 3=Thu, 4=Fri, 5=Sat, 6=Sun
   const jsToOur = [6, 0, 1, 2, 3, 4, 5];
-
   let currentDay = 0;
 
   function getTodayIndex() {
-    const jsDay = new Date().getDay();
-    return jsToOur[jsDay];
+    return jsToOur[new Date().getDay()];
   }
 
   function showDay(idx) {
@@ -714,71 +1069,53 @@
       const el = document.getElementById(id);
       if (el) el.classList.toggle('active', i === idx);
     });
-    // Update pills
     document.querySelectorAll('.day-pill').forEach((p, i) => {
       p.classList.toggle('active', i === idx);
     });
-    // Update today badge
-    const todayIdx = getTodayIndex();
     const badge = document.getElementById('todayBadge');
-    badge.textContent = idx === todayIdx ? 'Today' : DAY_NAMES[idx];
-
-    // Inject "now" line if today
+    badge.textContent = idx === getTodayIndex() ? 'Today' : DAY_NAMES[idx];
     injectNowLine(idx);
-
-    // Scroll pill into view
+    moveTracker(idx);
     const pills = document.querySelectorAll('.day-pill');
     if (pills[idx]) pills[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
   }
 
+  function moveTracker(idx) {
+    const tracker = document.getElementById('projectTracker');
+    const target = document.getElementById('day-' + idx);
+    if (target) {
+      target.appendChild(tracker);
+      tracker.style.display = 'block';
+    }
+  }
+
   function injectNowLine(idx) {
-    // Remove existing now lines
     document.querySelectorAll('.now-line').forEach(e => e.remove());
-
     if (idx !== getTodayIndex()) return;
-
     const now = new Date();
     const currentMinutes = now.getHours() * 60 + now.getMinutes();
     const timeLabel = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-
     const timeline = document.getElementById('timeline-' + idx);
     if (!timeline) return;
-
     const blocks = timeline.querySelectorAll('.time-block');
     let insertBefore = null;
-
     blocks.forEach(block => {
       const stamp = block.querySelector('.time-stamp');
       if (!stamp) return;
       const [h, m] = stamp.textContent.trim().split(':').map(Number);
-      const blockMins = h * 60 + (m || 0);
-      if (blockMins <= currentMinutes) insertBefore = block.nextSibling;
+      if ((h * 60 + (m || 0)) <= currentMinutes) insertBefore = block.nextSibling;
     });
-
     const nowEl = document.createElement('div');
     nowEl.className = 'now-line';
     nowEl.innerHTML = `<div class="now-dot"></div><span class="now-label">Now · ${timeLabel}</span>`;
-
-    if (insertBefore) {
-      timeline.insertBefore(nowEl, insertBefore);
-    } else {
-      timeline.prepend(nowEl);
-    }
+    if (insertBefore) timeline.insertBefore(nowEl, insertBefore);
+    else timeline.prepend(nowEl);
   }
 
-  function prevDay() {
-    showDay((currentDay - 1 + 7) % 7);
-  }
+  function prevDay() { showDay((currentDay - 1 + 7) % 7); }
+  function nextDay() { showDay((currentDay + 1) % 7); }
+  function goToToday() { showDay(getTodayIndex()); }
 
-  function nextDay() {
-    showDay((currentDay + 1) % 7);
-  }
-
-  function goToToday() {
-    showDay(getTodayIndex());
-  }
-
-  // Mark today pill on load
   function initPills() {
     const todayIdx = getTodayIndex();
     document.querySelectorAll('.day-pill').forEach((p, i) => {
@@ -786,7 +1123,8 @@
     });
   }
 
-  // Init
+  // ── INIT ──
+  renderTracker();
   initPills();
   goToToday();
 </script>
