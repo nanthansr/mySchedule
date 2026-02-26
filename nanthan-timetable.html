@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nanthan's Weekly Schedule</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --surface: #141414;
+    --surface2: #1c1c1c;
+    --border: #2a2a2a;
+    --accent: #e8ff3c;
+    --accent2: #3cffb0;
+    --accent3: #ff6b3c;
+    --muted: #555;
+    --text: #e8e8e8;
+    --text-dim: #888;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    padding: 2rem;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 3rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .header-left h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    letter-spacing: 0.04em;
+    line-height: 1;
+    color: var(--accent);
+  }
+
+  .header-left p {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 0.5rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .legend {
+    display: flex;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+  }
+
+  /* TAB SWITCHER */
+  .tab-container {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .tab-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.5rem 1.2rem;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+
+  .tab-btn.active {
+    background: var(--accent);
+    color: #000;
+    border-color: var(--accent);
+    font-weight: 600;
+  }
+
+  .tab-btn:hover:not(.active) {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* GRID */
+  .schedule-grid {
+    display: none;
+    gap: 1rem;
+  }
+
+  .schedule-grid.active {
+    display: grid;
+  }
+
+  .weekday-grid {
+    grid-template-columns: 80px repeat(5, 1fr);
+  }
+
+  .weekend-grid {
+    grid-template-columns: 80px repeat(2, 1fr);
+  }
+
+  .day-header {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.08em;
+    text-align: center;
+    padding: 0.75rem;
+    background: var(--surface2);
+    border-radius: 6px;
+    border: 1px solid var(--border);
+  }
+
+  .day-header.gym-day {
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+
+  .day-header.rest-day {
+    border-color: var(--border);
+    color: var(--text-dim);
+  }
+
+  .time-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    text-align: right;
+    padding-right: 0.75rem;
+    padding-top: 0.4rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* TIME BLOCKS */
+  .time-row {
+    display: contents;
+  }
+
+  .block {
+    padding: 0.6rem 0.75rem;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    font-size: 0.8rem;
+    line-height: 1.4;
+    position: relative;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .block:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    z-index: 10;
+  }
+
+  .block-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.7;
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+
+  .block-title {
+    font-weight: 600;
+    font-size: 0.78rem;
+  }
+
+  .block-sub {
+    font-size: 0.68rem;
+    opacity: 0.65;
+    margin-top: 0.15rem;
+  }
+
+  /* COLOR THEMES */
+  .b-sleep {
+    background: #111827;
+    border-color: #1f2937;
+    color: #6b7280;
+  }
+
+  .b-morning {
+    background: #1a1a0a;
+    border-color: #3d3d00;
+    color: var(--accent);
+  }
+
+  .b-commute {
+    background: #111;
+    border-color: #222;
+    color: var(--text-dim);
+  }
+
+  .b-french {
+    background: #0a0a1a;
+    border-color: #1a1a4d;
+    color: #8888ff;
+  }
+
+  .b-gym {
+    background: #001a0f;
+    border-color: #003320;
+    color: var(--accent2);
+  }
+
+  .b-tech {
+    background: #1a0800;
+    border-color: #3d1500;
+    color: var(--accent3);
+  }
+
+  .b-deep {
+    background: #120012;
+    border-color: #330033;
+    color: #cc88ff;
+  }
+
+  .b-read {
+    background: #0d1a1a;
+    border-color: #1a3333;
+    color: #66cccc;
+  }
+
+  .b-podcast {
+    background: #1a0d00;
+    border-color: #331a00;
+    color: #ffaa44;
+  }
+
+  .b-wind {
+    background: #0d0d0d;
+    border-color: #1a1a1a;
+    color: #555;
+  }
+
+  .b-empty {
+    background: transparent;
+    border-color: transparent;
+  }
+
+  /* STATS ROW */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+    margin: 2.5rem 0 2rem;
+    padding: 1.5rem;
+    background: var(--surface);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    line-height: 1;
+    color: var(--accent);
+  }
+
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-top: 0.3rem;
+  }
+
+  .stat-sub {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-top: 0.2rem;
+  }
+
+  /* NOTES SECTION */
+  .notes {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: var(--surface);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+  }
+
+  .notes h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    margin-bottom: 0.8rem;
+  }
+
+  .note-item {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    padding: 0.3rem 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+
+  .note-item:last-child { border-bottom: none; }
+
+  .note-tag {
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  /* DIVIDER */
+  .time-col-header {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: #333;
+    text-align: right;
+    padding-right: 0.75rem;
+    padding-top: 0.4rem;
+  }
+
+  @media (max-width: 700px) {
+    body { padding: 1rem; }
+    .weekday-grid { grid-template-columns: 60px repeat(5, 1fr); }
+    .weekend-grid { grid-template-columns: 60px repeat(2, 1fr); }
+    .block-title { font-size: 0.68rem; }
+    .block-sub { display: none; }
+    .block-label { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <h1>Weekly Schedule</h1>
+    <p>Nanthan Srikumar · Spring 2026 · Montreal</p>
+  </div>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#e8ff3c"></div>Deep Work / Tech</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#3cffb0"></div>Gym</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#8888ff"></div>French Class</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#ff6b3c"></div>Projects</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#cc88ff"></div>AWS Study</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#66cccc"></div>Reading</div>
+  </div>
+</header>
+
+<div class="tab-container">
+  <button class="tab-btn active" onclick="showTab('weekday')">Weekdays (Mon–Fri)</button>
+  <button class="tab-btn" onclick="showTab('weekend')">Weekend (Sat–Sun)</button>
+</div>
+
+<!-- WEEKDAY GRID -->
+<div id="weekday" class="schedule-grid weekday-grid active">
+
+  <!-- HEADERS -->
+  <div></div>
+  <div class="day-header gym-day">MON<br><small style="font-size:0.55rem;font-family:'DM Mono',monospace;letter-spacing:0.05em">🏋️ GYM</small></div>
+  <div class="day-header rest-day">TUE</div>
+  <div class="day-header gym-day">WED<br><small style="font-size:0.55rem;font-family:'DM Mono',monospace;letter-spacing:0.05em">🏋️ GYM</small></div>
+  <div class="day-header rest-day">THU</div>
+  <div class="day-header gym-day">FRI<br><small style="font-size:0.55rem;font-family:'DM Mono',monospace;letter-spacing:0.05em">🏋️ GYM</small></div>
+
+  <!-- 5:30 AM -->
+  <div class="time-label">5:30</div>
+  <div class="block b-morning" style="grid-column:span 5">
+    <span class="block-label">Wake Up · All Days</span>
+    <span class="block-title">⚡ Wake + Podcast Stack</span>
+    <div class="block-sub">AI Daily Brief + 5-min AI + Up First · while getting ready</div>
+  </div>
+
+  <!-- 6:00 AM -->
+  <div class="time-label">6:00</div>
+  <div class="block b-deep">
+    <span class="block-label">Deep Work</span>
+    <span class="block-title">🟣 AWS Study</span>
+    <div class="block-sub">SAA-C03 · hands-on labs</div>
+  </div>
+  <div class="block b-tech">
+    <span class="block-label">Project</span>
+    <span class="block-title">🔶 Wardrobe AI</span>
+    <div class="block-sub">Market research → pivot</div>
+  </div>
+  <div class="block b-deep">
+    <span class="block-label">Deep Work</span>
+    <span class="block-title">🟣 AWS Study</span>
+    <div class="block-sub">SAA-C03 · hands-on labs</div>
+  </div>
+  <div class="block b-tech">
+    <span class="block-label">Project</span>
+    <span class="block-title">🔶 Blog Writing</span>
+    <div class="block-sub">Polylith web app post</div>
+  </div>
+  <div class="block b-deep">
+    <span class="block-label">Deep Work</span>
+    <span class="block-title">🟣 AWS Study</span>
+    <div class="block-sub">Weekly review + mock Qs</div>
+  </div>
+
+  <!-- 7:00 AM -->
+  <div class="time-label">7:00</div>
+  <div class="block b-read" style="grid-column:span 5">
+    <span class="block-label">Reading · 30 min</span>
+    <span class="block-title">📖 Million Dollar Weekend</span>
+    <div class="block-sub">Cap at 30 min · no screens after</div>
+  </div>
+
+  <!-- 7:30 AM -->
+  <div class="time-label">7:30</div>
+  <div class="block b-commute" style="grid-column:span 5">
+    <span class="block-label">Commute · Leave by 7:45</span>
+    <span class="block-title">🚶 Walk 15min → Metro 30min</span>
+    <div class="block-sub">Podcasts already done · no screens · decompress</div>
+  </div>
+
+  <!-- 8:30 AM -->
+  <div class="time-label">8:30</div>
+  <div class="block b-french" style="grid-column:span 5">
+    <span class="block-label">French Class · Full Day</span>
+    <span class="block-title">🇫🇷 French Class — 8:30 → 3:30</span>
+    <div class="block-sub">Full presence. Speak. Make mistakes. It's training.</div>
+  </div>
+
+  <!-- 3:30 PM -->
+  <div class="time-label">3:30</div>
+  <div class="block b-commute" style="grid-column:span 5">
+    <span class="block-label">Post-class buffer · 30 min</span>
+    <span class="block-title">🚇 Commute Home</span>
+    <div class="block-sub">Head home or directly to gym (gym days) · arrive ~4:15–4:30</div>
+  </div>
+
+  <!-- 4:30 PM -->
+  <div class="time-label">4:30</div>
+  <div class="block b-gym">
+    <span class="block-label">GYM · 60–75 min</span>
+    <span class="block-title">🏋️ Le Gym SGW</span>
+    <div class="block-sub">Hybrid: lift + cardio. Done by 6pm.</div>
+  </div>
+  <div class="block b-tech">
+    <span class="block-label">Project Session</span>
+    <span class="block-title">🔶 ClaudeBot Setup</span>
+    <div class="block-sub">Mac setup / OpenClawCmap</div>
+  </div>
+  <div class="block b-gym">
+    <span class="block-label">GYM · 60–75 min</span>
+    <span class="block-title">🏋️ Le Gym SGW</span>
+    <div class="block-sub">Hybrid: lift + cardio. Done by 6pm.</div>
+  </div>
+  <div class="block b-tech">
+    <span class="block-label">Project Session</span>
+    <span class="block-title">🔶 Wardrobe AI</span>
+    <div class="block-sub">Build / research / code</div>
+  </div>
+  <div class="block b-gym">
+    <span class="block-label">GYM · 60–75 min</span>
+    <span class="block-title">🏋️ Le Gym SGW</span>
+    <div class="block-sub">Hybrid: lift + cardio. Done by 6pm.</div>
+  </div>
+
+  <!-- 6:00 PM -->
+  <div class="time-label">6:00</div>
+  <div class="block b-tech">
+    <span class="block-label">Evening Work</span>
+    <span class="block-title">🔶 Blog / AWS Review</span>
+    <div class="block-sub">Low-intensity post-gym</div>
+  </div>
+  <div class="block b-deep">
+    <span class="block-label">Evening Deep Work</span>
+    <span class="block-title">🟣 AWS Study Block</span>
+    <div class="block-sub">2nd session — practice Qs</div>
+  </div>
+  <div class="block b-tech">
+    <span class="block-label">Evening Work</span>
+    <span class="block-title">🔶 Blog / AWS Review</span>
+    <div class="block-sub">Low-intensity post-gym</div>
+  </div>
+  <div class="block b-deep">
+    <span class="block-label">Evening Deep Work</span>
+    <span class="block-title">🟣 ClaudeBot / OpenClawCmap</span>
+    <div class="block-sub">Docs · setup · notes</div>
+  </div>
+  <div class="block b-tech">
+    <span class="block-label">Weekly Wrap</span>
+    <span class="block-title">🔶 Review + Plan Next Week</span>
+    <div class="block-sub">30 min. What shipped?</div>
+  </div>
+
+  <!-- 7:00 PM -->
+  <div class="time-label">7:00</div>
+  <div class="block b-wind" style="grid-column:span 5">
+    <span class="block-label">Wind Down · Hard Stop</span>
+    <span class="block-title">🌙 Dinner · Decompress · No Screens After 9pm</span>
+    <div class="block-sub">Meal prep already done · eat · stretch · journal if you want · in bed by 9:30</div>
+  </div>
+
+  <!-- 9:30 PM -->
+  <div class="time-label">9:30</div>
+  <div class="block b-sleep" style="grid-column:span 5">
+    <span class="block-label">Sleep</span>
+    <span class="block-title">😴 Lights Out — 9:30–10pm</span>
+    <div class="block-sub">Non-negotiable. 5:30 wake needs 7.5h sleep to function. This is training too.</div>
+  </div>
+
+</div>
+
+
+<!-- WEEKEND GRID -->
+<div id="weekend" class="schedule-grid weekend-grid">
+
+  <div></div>
+  <div class="day-header gym-day">SAT<br><small style="font-size:0.55rem;font-family:'DM Mono',monospace;letter-spacing:0.05em">🏋️ GYM MORNING</small></div>
+  <div class="day-header rest-day">SUN<br><small style="font-size:0.55rem;font-family:'DM Mono',monospace;letter-spacing:0.05em">RECOVERY</small></div>
+
+  <div class="time-label">6:00</div>
+  <div class="block b-morning">
+    <span class="block-label">Wake Up</span>
+    <span class="block-title">⚡ Wake + Podcasts</span>
+    <div class="block-sub">AI Daily Brief + Up First + 5-min AI</div>
+  </div>
+  <div class="block b-morning">
+    <span class="block-label">Wake Up</span>
+    <span class="block-title">⚡ Wake + Podcasts</span>
+    <div class="block-sub">Slower morning. Same podcast stack.</div>
+  </div>
+
+  <div class="time-label">6:30</div>
+  <div class="block b-gym">
+    <span class="block-label">Gym · Pack Food</span>
+    <span class="block-title">🏋️ Morning Gym Session</span>
+    <div class="block-sub">Pack meals → Le Gym SGW → then Concordia lab</div>
+  </div>
+  <div class="block b-read">
+    <span class="block-label">Slow Morning</span>
+    <span class="block-title">📖 Million Dollar Weekend</span>
+    <div class="block-sub">1 hour reading · no rush</div>
+  </div>
+
+  <div class="time-label">8:00</div>
+  <div class="block b-commute">
+    <span class="block-label">Commute</span>
+    <span class="block-title">🚶 Mont Royal → SGW</span>
+    <div class="block-sub">15min walk + metro. Arrive ~8:30</div>
+  </div>
+  <div class="block b-deep">
+    <span class="block-label">Deep Work Block 1</span>
+    <span class="block-title">🟣 AWS Study — Focus</span>
+    <div class="block-sub">Mock exams / architecture deep dives</div>
+  </div>
+
+  <div class="time-label">9:00</div>
+  <div class="block b-deep">
+    <span class="block-label">Concordia Lab · Deep Work</span>
+    <span class="block-title">🟣 AWS + Projects (4 hr block)</span>
+    <div class="block-sub">Rotate: 90min AWS → 90min Project → 60min Blog</div>
+  </div>
+  <div class="block b-tech">
+    <span class="block-label">Project Block</span>
+    <span class="block-title">🔶 Wardrobe AI / ClaudeBot</span>
+    <div class="block-sub">Dedicated build time · no multitasking</div>
+  </div>
+
+  <div class="time-label">12:00</div>
+  <div class="block b-wind">
+    <span class="block-label">Lunch Break</span>
+    <span class="block-title">🥗 Eat (meal-prepped) + Walk Outside</span>
+    <div class="block-sub">Get off screens. 30–45 min. Mont Royal close by on Sunday.</div>
+  </div>
+  <div class="block b-wind">
+    <span class="block-label">Lunch + Reset</span>
+    <span class="block-title">🥗 Eat + Rest</span>
+    <div class="block-sub">Afternoon nap allowed if needed. Body recovery matters.</div>
+  </div>
+
+  <div class="time-label">1:00</div>
+  <div class="block b-tech">
+    <span class="block-label">Afternoon Block</span>
+    <span class="block-title">🔶 Blog Writing / ClaudeBot / OpenClawCmap</span>
+    <div class="block-sub">Whichever has momentum. Pick one, finish something.</div>
+  </div>
+  <div class="block b-deep">
+    <span class="block-label">AWS Review</span>
+    <span class="block-title">🟣 Weekly AWS Review</span>
+    <div class="block-sub">What did you actually retain this week?</div>
+  </div>
+
+  <div class="time-label">3:00</div>
+  <div class="block b-read">
+    <span class="block-label">Reading / Personal</span>
+    <span class="block-title">📖 Book + Journaling</span>
+    <div class="block-sub">Whatever restores you. This is not wasted time.</div>
+  </div>
+  <div class="block b-read">
+    <span class="block-label">Sunday Wind-Down</span>
+    <span class="block-title">📖 Book / Plan the Week</span>
+    <div class="block-sub">Set intentions. What are the 3 things that must ship this week?</div>
+  </div>
+
+  <div class="time-label">5:00</div>
+  <div class="block b-wind" style="grid-column:span 2">
+    <span class="block-label">Evening · Both Days</span>
+    <span class="block-title">🌙 Dinner + Decompress · No screens after 8pm → Bed by 9:30</span>
+    <div class="block-sub">Same rule applies weekends. 5:30am is real.</div>
+  </div>
+
+</div>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-num">3×</div>
+    <div class="stat-label">Gym / Week</div>
+    <div class="stat-sub">Mon, Wed, Fri + Sat</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">~6h</div>
+    <div class="stat-label">Tech Work / Weekday</div>
+    <div class="stat-sub">2h AM + 90min PM</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">5:30</div>
+    <div class="stat-label">Wake Time</div>
+    <div class="stat-sub">Podcasts while ready</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">9:30</div>
+    <div class="stat-label">Lights Out</div>
+    <div class="stat-sub">7.5h sleep protected</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">30min</div>
+    <div class="stat-label">Daily Reading</div>
+    <div class="stat-sub">Million Dollar Weekend</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">3×</div>
+    <div class="stat-label">Podcast Episodes</div>
+    <div class="stat-sub">Every morning</div>
+  </div>
+</div>
+
+<!-- NOTES -->
+<div class="notes">
+  <h3>⚡ Ground Rules</h3>
+  <div class="note-item"><span class="note-tag">→</span><span>AWS study is every weekday morning. Not every other day. Consistency beats intensity for certification prep.</span></div>
+  <div class="note-item"><span class="note-tag">→</span><span>Wardrobe AI: before you write another line of code, 1 week of market research. Alta exists. What's your actual angle? Answer that first.</span></div>
+  <div class="note-item"><span class="note-tag">→</span><span>ClaudeBot Mac setup + OpenClawCmap: these are Tuesday/Thursday projects. Don't bleed into AWS time.</span></div>
+  <div class="note-item"><span class="note-tag">→</span><span>Blog posts: Friday evening and Sunday afternoon. Batched. One post drafted or published per week minimum.</span></div>
+  <div class="note-item"><span class="note-tag">→</span><span>Podcasts happen while getting ready — not at the desk. That desk time is for building.</span></div>
+  <div class="note-item"><span class="note-tag">→</span><span>No screens after 9pm. You said you want to sleep early — this is the only way that actually works.</span></div>
+  <div class="note-item"><span class="note-tag">→</span><span>Saturday: gym → Concordia lab. Pack all your food. Full day block. Don't come home first.</span></div>
+  <div class="note-item"><span class="note-tag">→</span><span>The goal this semester: AWS cert in hand before graduation + 2 live portfolio projects + French progress. That's it.</span></div>
+</div>
+
+<script>
+  function showTab(id) {
+    document.querySelectorAll('.schedule-grid').forEach(g => g.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
+  }
+</script>
+
+</body>
+</html>
