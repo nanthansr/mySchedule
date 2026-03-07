@@ -1269,6 +1269,17 @@ function parseEnvelope(content) {
   };
 }
 
+function extractGistId(input) {
+  if (!input) return '';
+  const trimmed = input.trim();
+
+  // Accept either a raw gist ID or a full gist URL.
+  if (/^[a-f0-9]{20,}$/i.test(trimmed)) return trimmed;
+
+  const match = trimmed.match(/gist\.github\.com\/(?:[^/]+\/)?([a-f0-9]{20,})/i);
+  return match ? match[1] : '';
+}
+
 async function fetchRemoteEnvelope() {
   const res = await fetch(`https://api.github.com/gists/${syncConfig.gistId}`, {
     headers: getSyncHeaders()
@@ -1315,13 +1326,13 @@ async function setupSync() {
   const token = prompt('Enter a GitHub token with gist scope:', syncConfig.token || '');
   if (token === null) return;
 
-  const gistId = prompt('Enter your private gist ID for vault sync:', syncConfig.gistId || '');
-  if (gistId === null) return;
+  const gistInput = prompt('Enter your private gist ID or full gist URL for vault sync:', syncConfig.gistId || '');
+  if (gistInput === null) return;
 
   const trimmedToken = token.trim();
-  const trimmedGistId = gistId.trim();
+  const trimmedGistId = extractGistId(gistInput);
   if (!trimmedToken || !trimmedGistId) {
-    setSyncStatus('Sync setup cancelled: missing token or gist ID', true);
+    setSyncStatus('Sync setup cancelled: invalid token or gist ID/URL', true);
     return;
   }
 
