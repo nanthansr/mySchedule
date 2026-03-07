@@ -101,6 +101,38 @@ body::before {
   flex-wrap: wrap;
 }
 
+.page-links {
+  display: flex;
+  gap: 0.55rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.page-link {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.35rem 0.72rem;
+  border-radius: 14px;
+  border: 1px solid var(--border2);
+  color: var(--dim);
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.page-link.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #000;
+  font-weight: 600;
+}
+
+.page-link:hover:not(.active) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
 .hstat {
   text-align: center;
 }
@@ -632,6 +664,11 @@ body::before {
         <div class="hstat"><div class="hstat-num pro" id="proCount">0</div><div class="hstat-label">Professional</div></div>
         <div class="hstat"><div class="hstat-num fun" id="funCount">0</div><div class="hstat-label">Experiments</div></div>
       </div>
+      <nav class="page-links" aria-label="Quick pages">
+        <a class="page-link" href="mobile.html">Schedule</a>
+        <a class="page-link active" href="projects.html">Projects</a>
+        <a class="page-link" href="mlops-career.html">Career</a>
+      </nav>
     </div>
     <button class="add-btn" onclick="toggleAddForm()">+ Add Project</button>
   </div>

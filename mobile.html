@@ -80,6 +80,43 @@
 
   .day-selector::-webkit-scrollbar { display: none; }
 
+  .quick-nav {
+    display: flex;
+    gap: 0.45rem;
+    overflow-x: auto;
+    padding: 0.7rem 1.2rem 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .quick-nav::-webkit-scrollbar { display: none; }
+
+  .quick-link {
+    flex-shrink: 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.63rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.38rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .quick-link.active {
+    color: #000;
+    background: var(--accent);
+    border-color: var(--accent);
+    font-weight: 600;
+  }
+
+  .quick-link:hover:not(.active) {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
   .day-pill {
     flex-shrink: 0;
     font-family: 'DM Mono', monospace;
@@ -566,6 +603,11 @@
     <button class="day-pill" onclick="showDay(5)">Sat</button>
     <button class="day-pill" onclick="showDay(6)">Sun</button>
   </div>
+  <nav class="quick-nav" aria-label="Quick pages">
+    <a class="quick-link active" href="mobile.html">Schedule</a>
+    <a class="quick-link" href="projects.html">Projects</a>
+    <a class="quick-link" href="mlops-career.html">Career</a>
+  </nav>
 </div>
 
 <!-- MONDAY -->

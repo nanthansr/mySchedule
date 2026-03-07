@@ -89,6 +89,40 @@
     letter-spacing: 0.05em;
   }
 
+  .quick-nav {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .quick-link {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 4px 10px;
+    text-decoration: none;
+    transition: all 0.2s;
+    background: rgba(17,20,24,0.8);
+  }
+
+  .quick-link.active {
+    background: rgba(0,212,255,0.15);
+    border-color: rgba(0,212,255,0.35);
+    color: var(--accent);
+  }
+
+  .quick-link:hover:not(.active) {
+    color: var(--accent);
+    border-color: rgba(0,212,255,0.35);
+  }
+
   .container {
     max-width: 960px;
     margin: 0 auto;
@@ -506,6 +540,11 @@
   <div class="tag">CAREER INTELLIGENCE BRIEF</div>
   <h1>Cloud × MLOps × AI Engineer<br><span>2026 Job Market — What Actually Matters</span></h1>
   <div class="header-meta">Nandy Srikumar &nbsp;·&nbsp; March 2026 &nbsp;·&nbsp; Montreal + Global Market</div>
+  <nav class="quick-nav" aria-label="Quick pages">
+    <a class="quick-link" href="mobile.html">Schedule</a>
+    <a class="quick-link" href="projects.html">Projects</a>
+    <a class="quick-link active" href="mlops-career.html">Career</a>
+  </nav>
 </div>
 
 <div class="container">
