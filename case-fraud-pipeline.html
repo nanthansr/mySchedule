@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case Study: Cloud-Native MLOps Fraud Detection Pipeline — Nanthan SR</title>
+<meta name="description" content="A deep technical walkthrough of the fraud detection MLOps pipeline: architecture decisions, what failed, metrics, and an incident simulation.">
+<meta property="og:title" content="Fraud Detection Pipeline — MLOps Case Study">
+<meta property="og:description" content="End-to-end MLOps pipeline: FastAPI + XGBoost + MLflow + Prometheus + Grafana + GitHub Actions CI/CD.">
+<meta property="og:type" content="article">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #0a0c10;
+    --surface: #111418;
+    --surface2: #181c22;
+    --border: #1e2530;
+    --accent: #00d4ff;
+    --accent2: #7c3aed;
+    --accent3: #22c55e;
+    --warn: #f59e0b;
+    --danger: #ef4444;
+    --text: #e2e8f0;
+    --text-muted: #64748b;
+    --text-dim: #94a3b8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    line-height: 1.75;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #0a0c10 0%, #0f1520 50%, #0a0c10 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 48px 40px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(0,212,255,0.07) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .tag {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.2);
+    padding: 3px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.08em;
+    margin-bottom: 16px;
+  }
+
+  .header h1 {
+    font-size: clamp(22px, 4vw, 32px);
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.25;
+    margin-bottom: 10px;
+    position: relative;
+  }
+
+  .header h1 span { color: var(--accent); }
+
+  .header-meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    margin-top: 6px;
+  }
+
+  .quick-nav {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .quick-link {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 4px 10px;
+    text-decoration: none;
+    transition: all 0.2s;
+    background: rgba(17,20,24,0.8);
+  }
+
+  .quick-link.active {
+    background: rgba(0,212,255,0.15);
+    border-color: rgba(0,212,255,0.35);
+    color: var(--accent);
+  }
+
+  .quick-link:hover:not(.active) {
+    color: var(--accent);
+    border-color: rgba(0,212,255,0.35);
+  }
+
+  /* CONTENT */
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 40px 80px;
+  }
+
+  .section {
+    margin-bottom: 56px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.15);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .section-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .callout {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 14px 18px;
+    font-size: 14px;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+
+  /* ARCHITECTURE DIAGRAM (text-based) */
+  .arch-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 2;
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  .arch-box .hl { color: var(--accent); }
+  .arch-box .hl2 { color: var(--accent3); }
+  .arch-box .hl3 { color: var(--warn); }
+  .arch-box .hl4 { color: #a78bfa; }
+
+  /* DECISION TABLE */
+  .decision-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .decision-row {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    display: grid;
+    grid-template-columns: 160px 1fr 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+
+  @media (max-width: 640px) {
+    .decision-row { grid-template-columns: 1fr; }
+  }
+
+  .decision-tool {
+    font-weight: 600;
+    font-size: 14px;
+    color: #fff;
+  }
+
+  .decision-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    display: block;
+    margin-top: 2px;
+  }
+
+  .decision-why { font-size: 13px; color: var(--text-dim); line-height: 1.55; }
+  .decision-alt { font-size: 12px; color: var(--text-muted); font-style: italic; }
+
+  /* WHAT FAILED */
+  .fail-card {
+    background: var(--surface);
+    border: 1px solid rgba(239,68,68,0.2);
+    border-left: 3px solid var(--danger);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+  }
+
+  .fail-title {
+    font-weight: 600;
+    color: #fff;
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+
+  .fail-detail { font-size: 13px; color: var(--text-dim); }
+  .fail-fix { font-size: 12px; color: var(--accent3); margin-top: 6px; }
+
+  /* METRICS */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .metric-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+    text-align: center;
+  }
+
+  .metric-val {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--accent);
+    display: block;
+  }
+
+  .metric-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+
+  /* INCIDENT TIMELINE */
+  .incident-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+  }
+
+  .incident-timeline::before {
+    content: '';
+    position: absolute;
+    left: 14px;
+    top: 8px;
+    bottom: 8px;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .incident-step {
+    display: grid;
+    grid-template-columns: 32px 1fr;
+    gap: 16px;
+    padding-bottom: 20px;
+    position: relative;
+  }
+
+  .incident-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+    margin-top: 4px;
+  }
+
+  .dot-warn { background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.4); color: var(--warn); }
+  .dot-danger { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.35); color: var(--danger); }
+  .dot-info { background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.3); color: var(--accent); }
+  .dot-ok { background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.3); color: var(--accent3); }
+
+  .incident-body { }
+  .incident-time { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); }
+  .incident-title { font-weight: 600; color: #fff; font-size: 14px; margin: 2px 0 4px; }
+  .incident-detail { font-size: 13px; color: var(--text-dim); }
+
+  code {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    background: rgba(0,212,255,0.07);
+    border: 1px solid rgba(0,212,255,0.15);
+    border-radius: 3px;
+    padding: 1px 5px;
+    color: var(--accent);
+  }
+
+  /* SIGNAL GRID (interview moves) */
+  .signal-grid { display: flex; flex-direction: column; gap: 0; }
+  .signal-row {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 20px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: start;
+  }
+  @media (max-width: 640px) { .signal-row { grid-template-columns: 1fr; } }
+  .signal-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+  .signal-val { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+
+  @media (max-width: 700px) {
+    .container { padding: 24px 20px 60px; }
+    .header { padding: 32px 20px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="tag">CASE STUDY · FLAGSHIP PROJECT</div>
+  <h1>Cloud-Native MLOps Pipeline<br><span>Fraud Detection — Deep Technical Walkthrough</span></h1>
+  <div class="header-meta">Nanthan SR &nbsp;·&nbsp; Spring 2026 &nbsp;·&nbsp; Full system design + incident simulation</div>
+  <nav class="quick-nav" aria-label="Quick pages">
+    <a class="quick-link" href="mobile.html">Schedule</a>
+    <a class="quick-link" href="projects.html">Projects</a>
+    <a class="quick-link" href="mlops-career.html">Career</a>
+    <a class="quick-link" href="workout-plan.html">Workout</a>
+    <a class="quick-link" href="portfolio.html">Portfolio</a>
+    <a class="quick-link active" href="case-fraud-pipeline.html">Case Study</a>
+  </nav>
+</div>
+
+<div class="container">
+
+  <!-- SECTION 1: THE PROBLEM -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <span class="section-title">The Problem</span>
+    </div>
+    <div class="callout">
+      Credit card fraud detection is a canonical hard ML problem: extreme class imbalance (~0.17% fraud rate), high cost of false negatives, real-time latency requirements, and production environments where model behavior must be continuously monitored.
+    </div>
+    <p style="color:var(--text-dim);font-size:14px;margin-bottom:12px;">
+      The goal was to build a production-grade MLOps pipeline — not just a Jupyter notebook with a model. The project needed to demonstrate every component that appears in real MLOps engineering JDs:
+    </p>
+    <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:12px;">
+      <li style="font-size:13px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--accent3);flex-shrink:0;">✓</span> REST API serving layer (not batch inference)</li>
+      <li style="font-size:13px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--accent3);flex-shrink:0;">✓</span> Experiment tracking and model artifact versioning</li>
+      <li style="font-size:13px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--accent3);flex-shrink:0;">✓</span> Automated CI/CD pipeline (test → retrain → build → push)</li>
+      <li style="font-size:13px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--accent3);flex-shrink:0;">✓</span> Model monitoring with drift detection</li>
+      <li style="font-size:13px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--accent3);flex-shrink:0;">✓</span> Infrastructure observability (Prometheus + Grafana)</li>
+    </ul>
+  </div>
+
+  <!-- SECTION 2: ARCHITECTURE -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <span class="section-title">Architecture</span>
+    </div>
+    <div class="callout">
+      All components run in Docker Compose. The serving layer, MLflow server, and monitoring stack are separate containers communicating over a shared Docker network.
+    </div>
+    <div class="arch-box"><span class="hl">┌─ GitHub Actions CI/CD ──────────────────────────────────────────────┐</span>
+│  push → pytest → mlflow run (retrain) → docker build → image push  │
+<span class="hl">└─────────────────────────────────────────────────────────────────────┘</span>
+                          │
+                          ▼
+<span class="hl2">┌─ FastAPI Serving Container ──────────────────┐</span>
+│  POST /predict → XGBoost model (.pkl)        │
+│  GET  /health  → liveness probe              │
+│  GET  /metrics → Prometheus scrape endpoint  │
+│      ↑                                        │
+│  model artifact loaded from MLflow registry  │
+<span class="hl2">└──────────────────────────────────────────────┘</span>
+         │ metrics
+         ▼
+<span class="hl3">┌─ Prometheus ──────────────┐     ┌─ MLflow Server ─────────┐</span>
+│  Scrapes /metrics every   │     │  Experiment tracking    │
+│  15s. Stores time-series. │     │  Artifact storage       │
+│  Alert rules for drift.   │     │  (local ./mlruns)       │
+<span class="hl3">└───────────────────────────┘     └─────────────────────────┘</span>
+         │
+         ▼
+<span class="hl4">┌─ Grafana Dashboards ──────────────────────────┐</span>
+│  Infra metrics (CPU, mem, request latency)    │
+│  Model metrics (fraud rate, prediction dist.) │
+│  Alert: fraud_rate_pct &gt; 2σ baseline          │
+<span class="hl4">└───────────────────────────────────────────────┘</span>
+</div>
+  </div>
+
+  <!-- SECTION 3: TOOLS CHOSEN AND WHY -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <span class="section-title">Tools Chosen & Why</span>
+    </div>
+    <div class="decision-grid">
+
+      <div class="decision-row">
+        <div>
+          <div class="decision-tool">XGBoost</div>
+          <span class="decision-label">ML Model</span>
+        </div>
+        <div class="decision-why">Fraud detection is a structured tabular problem. XGBoost consistently outperforms deep learning on tabular data and handles class imbalance through <code>scale_pos_weight</code>. Trains in seconds, not hours. Interpretable feature importance. Correct evaluation: AUC-PR, not accuracy — because 99.8% of samples are negative.</div>
+        <div class="decision-alt">Alternatives considered: LightGBM (similar performance, less ecosystem), RandomForest (slower, less regularization control), sklearn LogisticRegression (too simple for this dataset).</div>
+      </div>
+
+      <div class="decision-row">
+        <div>
+          <div class="decision-tool">FastAPI</div>
+          <span class="decision-label">Serving Layer</span>
+        </div>
+        <div class="decision-why">FastAPI's async-first design and automatic OpenAPI docs are production-grade defaults. Uvicorn provides ASGI performance. The <code>/predict</code>, <code>/health</code>, and <code>/metrics</code> endpoints cover the three things you need in any production ML service: inference, liveness, and observability.</div>
+        <div class="decision-alt">Alternatives: Flask (synchronous, no native async), BentoML (opinionated, heavy), TorchServe (overkill for sklearn/XGBoost).</div>
+      </div>
+
+      <div class="decision-row">
+        <div>
+          <div class="decision-tool">MLflow</div>
+          <span class="decision-label">Experiment Tracking</span>
+        </div>
+        <div class="decision-why">MLflow is the de-facto standard for experiment tracking in open-source MLOps. It handles run logging, artifact storage, and model versioning with zero configuration — just point it at a local directory. The Model Registry provides explicit stage gates (None → Staging → Production).</div>
+        <div class="decision-alt">Alternatives: Weights & Biases (SaaS, great UI, requires account), DVC (Git-based, better for data versioning), Neptune.ai (commercial).</div>
+      </div>
+
+      <div class="decision-row">
+        <div>
+          <div class="decision-tool">Prometheus + Grafana</div>
+          <span class="decision-label">Observability</span>
+        </div>
+        <div class="decision-why">Prometheus pull-model fits containerized apps perfectly — no agent needed. The <code>prometheus_client</code> Python library exposes custom model metrics (fraud rate, prediction latency) alongside default process metrics through the same <code>/metrics</code> endpoint. Grafana provides the dashboard layer. This mirrors what enterprise teams do with Datadog or Dynatrace — same primitives, self-managed.</div>
+        <div class="decision-alt">Alternatives: Datadog (commercial, $$$), New Relic (commercial), custom logging only (no alerting).</div>
+      </div>
+
+      <div class="decision-row">
+        <div>
+          <div class="decision-tool">GitHub Actions</div>
+          <span class="decision-label">CI/CD</span>
+        </div>
+        <div class="decision-why">GitHub Actions is the industry standard for open-source CI/CD. The pipeline runs: <code>pytest</code> → MLflow training run → Docker build → Docker push. The deliberate architecture choice was to retrain in CI as an intermediate step, producing a new model artifact that gets packaged into the Docker image.</div>
+        <div class="decision-alt">Alternatives: Jenkins (self-hosted, operational overhead), CircleCI (similar, less free tier), GitLab CI (locked to GitLab).</div>
+      </div>
+
+      <div class="decision-row">
+        <div>
+          <div class="decision-tool">Docker Compose</div>
+          <span class="decision-label">Orchestration</span>
+        </div>
+        <div class="decision-why">For a 4-container stack (FastAPI, MLflow, Prometheus, Grafana), Docker Compose provides exactly the right level of orchestration — no Kubernetes overhead for a single-node dev/demo environment. The compose file defines service dependencies, shared volumes, and the Docker network in ~60 lines.</div>
+        <div class="decision-alt">Next step: Cloud Run (GCP) for the serving layer, removing the single-host constraint. Then Kubernetes for orchestration at scale.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECTION 4: WHAT FAILED -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <span class="section-title">What Failed — Honest Engineering Log</span>
+    </div>
+    <div class="callout">
+      Production systems fail in ways notebooks don't. Here's what actually went wrong and what it taught me.
+    </div>
+
+    <div class="fail-card">
+      <div class="fail-title">Model artifact path was hardcoded in the Docker image</div>
+      <div class="fail-detail">Early versions baked the model <code>.pkl</code> path as an environment variable that pointed to a local path. When the container ran, the path didn't exist — model failed to load silently, returning 500 on every predict request.</div>
+      <div class="fail-fix">Fix: MLflow artifact URI is now passed at container start via <code>MODEL_URI</code> env var. The serving layer loads the model dynamically from the MLflow tracking server on startup.</div>
+    </div>
+
+    <div class="fail-card">
+      <div class="fail-title">Prometheus metrics endpoint caused race condition on startup</div>
+      <div class="fail-detail">FastAPI tried to register Prometheus metrics before the <code>prometheus_client</code> registry was initialized, causing <code>ValueError: Duplicated timeseries</code> on hot-reload during development.</div>
+      <div class="fail-fix">Fix: Moved metric instantiation to module level (not inside request handlers). Used <code>if not REGISTRY._names_to_collectors</code> guard for dev reload compatibility.</div>
+    </div>
+
+    <div class="fail-card">
+      <div class="fail-title">Class imbalance wasn't caught until after first training run</div>
+      <div class="fail-detail">First training run reported 99.8% "accuracy." The model was predicting all-negative — and that prediction was technically correct 99.8% of the time. AUC-ROC looked fine at 0.72. It wasn't. AUC-PR was 0.11 — the model was useless.</div>
+      <div class="fail-fix">Fix: Added <code>scale_pos_weight = (n_negatives / n_positives)</code>. Switched primary metric to AUC-PR. Logged both to MLflow for every run. Final AUC-PR: 0.87.</div>
+    </div>
+
+    <div class="fail-card">
+      <div class="fail-title">GitHub Actions couldn't authenticate to Docker Hub</div>
+      <div class="fail-detail">Secrets were set as repo environment variables but referenced as <code>$DOCKER_TOKEN</code> (shell syntax) instead of <code>${{ secrets.DOCKER_TOKEN }}</code> (Actions syntax). The workflow failed with <code>unauthorized</code> — confusing because the credentials were correct.</div>
+      <div class="fail-fix">Fix: Used correct Actions expression syntax throughout. Added a step to verify Docker login succeeded before building the image.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: METRICS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <span class="section-title">Metrics & Results</span>
+    </div>
+
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <span class="metric-val">0.87</span>
+        <span class="metric-label">AUC-PR (precision-recall curve) — primary metric</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-val">0.94</span>
+        <span class="metric-label">AUC-ROC (secondary metric)</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-val">0.17%</span>
+        <span class="metric-label">Dataset fraud rate (class imbalance)</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-val">&lt;20ms</span>
+        <span class="metric-label">p95 inference latency (single prediction)</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-val">4</span>
+        <span class="metric-label">Docker containers (FastAPI, MLflow, Prometheus, Grafana)</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-val">100%</span>
+        <span class="metric-label">CI pipeline test coverage on model + API</span>
+      </div>
+    </div>
+
+    <div class="callout" style="border-left-color:var(--accent3);">
+      <strong>Why AUC-PR and not accuracy?</strong> When 99.8% of samples are non-fraudulent, a model predicting "not fraud" for every transaction achieves 99.8% accuracy and 0% utility. AUC-PR measures how well the model ranks the positive class — it's sensitive to false negatives in a way accuracy is not. This is the answer you give in an interview when asked about evaluation metrics.
+    </div>
+  </div>
+
+  <!-- SECTION 6: INCIDENT SIMULATION -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <span class="section-title">Incident Simulation — Fraud Rate Spike</span>
+    </div>
+    <div class="callout">
+      Scenario: A new fraud pattern emerges over a 4-hour window. Transaction volumes are normal, but the fraud rate climbs from the 0.17% baseline to 2.3%. Here is how the monitoring stack catches it and what the on-call engineer does.
+    </div>
+
+    <div class="incident-timeline">
+
+      <div class="incident-step">
+        <div class="incident-dot dot-info">T+0</div>
+        <div class="incident-body">
+          <div class="incident-time">00:00 UTC</div>
+          <div class="incident-title">Baseline: Everything nominal</div>
+          <div class="incident-detail">Prometheus shows fraud_rate_pct = 0.18%. Prediction latency p95 = 16ms. No active alerts. Grafana dashboard green.</div>
+        </div>
+      </div>
+
+      <div class="incident-step">
+        <div class="incident-dot dot-warn">T+1h</div>
+        <div class="incident-body">
+          <div class="incident-time">01:00 UTC — Early signal</div>
+          <div class="incident-title">Fraud rate begins climbing silently</div>
+          <div class="incident-detail">fraud_rate_pct rises to 0.6%. No alert fires yet (threshold is 2σ = ~0.8% for this baseline). Prediction latency unchanged — the model is making predictions fine; the issue is in what it's seeing, not how fast.</div>
+        </div>
+      </div>
+
+      <div class="incident-step">
+        <div class="incident-dot dot-warn">T+2h</div>
+        <div class="incident-body">
+          <div class="incident-time">02:15 UTC — Alert fires</div>
+          <div class="incident-title">Prometheus alert: fraud_rate_pct &gt; 2σ</div>
+          <div class="incident-detail">Alert rule: <code>fraud_rate_pct &gt; 0.85 for 5m</code> fires. Grafana sends webhook notification. On-call engineer woken at 02:15 UTC. Fraud rate is now 1.2% — 7× the baseline.</div>
+        </div>
+      </div>
+
+      <div class="incident-step">
+        <div class="incident-dot dot-danger">T+3h</div>
+        <div class="incident-body">
+          <div class="incident-time">02:20 UTC — Triage</div>
+          <div class="incident-title">Engineer investigates: model or data?</div>
+          <div class="incident-detail">
+            Step 1: Check <code>/health</code> — serving layer is healthy, model loaded correctly.<br>
+            Step 2: Check Grafana — prediction distribution has shifted. The model's confidence scores for fraud are higher than baseline. Input feature distributions have drifted (mean transaction amount ↑ 40%, new merchant category appears).<br>
+            Step 3: This is a <strong>data drift event</strong>, not a serving failure. The model is working correctly — it's seeing transactions that look like the fraud patterns it learned. But the scale is unusual.
+          </div>
+        </div>
+      </div>
+
+      <div class="incident-step">
+        <div class="incident-dot dot-danger">T+4h</div>
+        <div class="incident-body">
+          <div class="incident-time">03:00 UTC — Decision point</div>
+          <div class="incident-title">Escalate vs. retrain decision</div>
+          <div class="incident-detail">
+            Options:<br>
+            (a) Lower the fraud threshold temporarily to flag more transactions — increases false positives but reduces false negatives during the event.<br>
+            (b) Trigger an emergency retrain with recent data labeled by the fraud team.<br>
+            (c) Escalate to fraud operations team to manually review flagged transactions.<br>
+            <br>
+            Decision: (a) + (c). Threshold lowered via config (no redeploy needed — served as env var). Fraud ops team notified with dashboard link.
+          </div>
+        </div>
+      </div>
+
+      <div class="incident-step">
+        <div class="incident-dot dot-ok">T+6h</div>
+        <div class="incident-body">
+          <div class="incident-time">05:30 UTC — Resolution</div>
+          <div class="incident-title">Fraud rate returns to baseline</div>
+          <div class="incident-detail">Fraud operations confirmed a coordinated card-skimming attack, now blocked at the card network level. Rate drops to 0.19%. Alert resolves automatically. Postmortem: document the new fraud pattern as a labeled training example. Schedule retrain for next CI run. Restore threshold to default.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="callout" style="margin-top:20px;border-left-color:var(--accent2);">
+      <strong>What this demonstrates:</strong> A monitoring system isn't just graphs — it's a decision-making layer. The value of Prometheus + Grafana here isn't the charts; it's the alert that woke someone up and the dashboard that gave them the context to make the right call in 40 minutes instead of finding out via customer complaints 6 hours later.
+    </div>
+  </div>
+
+  <!-- SECTION 7: INTERVIEW MOVES -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">07</span>
+      <span class="section-title">Interview Signals — How to Talk About This</span>
+    </div>
+    <div class="signal-grid">
+      <div class="signal-row">
+        <span class="signal-label">When asked to walk through a project</span>
+        <span class="signal-val">"I built a production MLOps pipeline for fraud detection — not just the model, but the full stack: FastAPI serving layer, MLflow for experiment tracking, Prometheus + Grafana for model monitoring, and a GitHub Actions CI/CD pipeline that retrains and redeploys on every commit. The interesting engineering problems were around class imbalance, metric selection, and model drift detection."</span>
+      </div>
+      <div class="signal-row">
+        <span class="signal-label">When asked about observability</span>
+        <span class="signal-val">"I exposed custom model metrics through the same /metrics endpoint Prometheus scrapes — fraud rate percentage, prediction latency distribution, input feature statistics. This mirrors how Datadog or Dynatrace work at enterprise scale. The monitoring stack isn't decorative — it caught a fraud spike before it became a customer-impacting incident."</span>
+      </div>
+      <div class="signal-row">
+        <span class="signal-label">When asked about class imbalance</span>
+        <span class="signal-val">"The dataset had a 0.17% fraud rate. My first model hit 99.8% accuracy — and was completely useless. I switched the primary metric to AUC-PR, added scale_pos_weight to XGBoost, and went from AUC-PR 0.11 to 0.87. The lesson: metric selection in ML is an architectural decision, not an afterthought."</span>
+      </div>
+      <div class="signal-row">
+        <span class="signal-label">When asked about CI/CD for ML</span>
+        <span class="signal-val">"The GitHub Actions pipeline runs pytest, then triggers an MLflow training run that logs all metrics and stores the model artifact, then builds a new Docker image with the updated model, then pushes to registry. The deliberate choice was to retrain in CI — not just test. That means every merge to main produces a new deployable model version."</span>
+      </div>
+      <div class="signal-row">
+        <span class="signal-label">When asked about what you'd do differently</span>
+        <span class="signal-val">"Three things: move the serving layer to GCP Cloud Run to remove the single-host constraint; add Evidently AI for formal drift detection instead of custom numpy code; and implement the MLflow Model Registry with explicit stage gates so nothing goes to production without a registered version. That's my Stage 3."</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER LINKS -->
+  <div style="border-top:1px solid var(--border);padding-top:24px;display:flex;gap:12px;flex-wrap:wrap;">
+    <a href="portfolio.html" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(0,212,255,0.25);border-radius:4px;padding:6px 14px;text-decoration:none;">← Portfolio</a>
+    <a href="mlops-career.html" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);border:1px solid var(--border);border-radius:4px;padding:6px 14px;text-decoration:none;">Career Intel →</a>
+    <a href="projects.html" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);border:1px solid var(--border);border-radius:4px;padding:6px 14px;text-decoration:none;">All Projects →</a>
+  </div>
+
+</div>
+</body>
+</html>
