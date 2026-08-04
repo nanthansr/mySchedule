@@ -1,0 +1,5 @@
+.DS_Store
+*.log
+
+# gitignored checkout of nanthansr/nanthansr - source of truth is docs/profile-README.md
+profile/

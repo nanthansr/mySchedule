@@ -1,76 +1,30 @@
-# mySchedule
+# nanthansr.github.io
 
-Personal portfolio workspace with three core private-use pages:
-- `mobile.html` - daily schedule view optimized for phone
-- `projects.html` - dynamic project vault (add/edit/delete/search)
-- `mlops-career.html` - MLOps career brief
+My portfolio. Live at **<https://nanthansr.github.io/>**.
 
-`index.html` remains the public-facing entry page.
+Static HTML, CSS and vanilla JS. No framework, no build step, no dependencies.
 
-## Quick Start
+| File | Page |
+|---|---|
+| `index.html` | the portfolio |
+| `case-fraud-pipeline.html` | deep walkthrough of the MLOps fraud-detection pipeline |
+| `assets/` | architecture diagrams (SVG) and screenshots |
+| `docs/` | working notes, not published |
 
-1. Clone the repo.
-2. Open the folder in VS Code.
-3. Open `index.html` (public) or `mobile.html` / `projects.html` / `mlops-career.html` directly in a browser.
+## Run it locally
 
-No build step is required. This is a static HTML/CSS/JS site.
+```
+python3 -m http.server 8000
+```
 
-## Page Navigation
+Then open <http://localhost:8000>.
 
-The three private pages are cross-linked so you can jump between them quickly:
-- Schedule (`mobile.html`)
-- Projects (`projects.html`)
-- Career (`mlops-career.html`)
+## Deploy
 
-## Projects Page Features
+Pushing to `main` runs HTML validation and publishes to GitHub Pages. Nothing to do by hand.
 
-`projects.html` includes:
-- tabbed views (`All`, `Professional`, `Experiments`)
-- add project form
-- edit notes and status from modal
-- delete projects
-- search/filter by title, tags, description, notes, and status
-- reset to default projects action
-- lightweight success toasts for add/save/delete
+## Elsewhere
 
-## Data Storage
-
-By default, project data is stored in browser `localStorage`.
-
-This means:
-- works offline on your phone/laptop
-- fast and private per browser
-- not shared between devices unless sync is configured
-
-## Cross-Device Sync (GitHub Gist)
-
-`projects.html` supports optional sync using a private GitHub Gist.
-
-### One-time setup
-
-1. Create a **private gist** on GitHub.
-2. Copy the gist ID from the URL.
-3. Create a GitHub token with `gist` scope.
-4. Open `projects.html`.
-5. Click `Setup Sync`.
-6. Enter token and gist ID.
-
-### Daily use
-
-- After changes on device A: click `Sync Now` (push)
-- On device B: click `Sync Now` (pull)
-
-The sync file name stored in your gist is `projects-vault.json`.
-
-## Security Note
-
-The sync token is saved in browser localStorage on each device for convenience.
-Use a token with minimal scope (`gist`) and rotate/revoke it if needed.
-
-## Repo Structure
-
-- `index.html`
-- `mobile.html`
-- `projects.html`
-- `mlops-career.html`
-- `README.md`
+[GitHub](https://github.com/nanthansr) ·
+[LinkedIn](https://www.linkedin.com/in/nanthan-sr/) ·
+nanthansr@gmail.com

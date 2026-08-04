@@ -1,133 +1,92 @@
-# CLAUDE.md — mySchedule / Career Portfolio
+# CLAUDE.md - portfolio
 
-This file is loaded at the start of every Claude Code session. It encodes all project conventions so sessions start productive immediately.
+This directory owns **everything public-facing about Nanthan as an engineer**.
+Repo: `nanthansr/nanthansr.github.io`, served at <https://nanthansr.github.io/>.
 
----
+Renamed from `mySchedule` on 2026-08-04. The private daily-use pages moved to
+`../dashboard/` (repo `nanthansr/dashboard`, private, Cloudflare Access).
 
-## What This Repo Is
+## Scope: what this directory owns
 
-A **pure static HTML/CSS/JS** personal site with no framework, no build step, no dependencies.
-Serves two purposes:
-1. **Daily-use personal dashboard** (schedule, workout, project tracker)
-2. **Public hiring surface** for an active Montreal MLOps job search (Spring 2026)
+1. **The portfolio site** - `index.html` and the case-study pages.
+2. **The GitHub profile README** - source of truth is `docs/profile-README.md`; `profile/` is a gitignored checkout of `nanthansr/nanthansr` that it gets copied into.
+3. **The visibility ledger** - `docs/VISIBILITY.tsv`. Every repo Nanthan owns, its public/private call, and the reason. Re-runnable, not a one-off decision.
+4. **The README standard** - `docs/repo-readme-standard.md`, applied to every showcase repo.
+5. **The asset pipeline** - `assets/diagrams/*.svg` and `assets/shots/*.png`, copied into each showcase repo's `docs/img/`.
 
-Files: `index.html`, `mobile.html`, `projects.html`, `mlops-career.html`, `workout-plan.html`, `portfolio.html`, `case-fraud-pipeline.html`
+If a task touches how Nanthan looks to a hiring manager, it belongs here.
 
----
+## Positioning
 
-## Hard Constraints
+Audience is **hiring managers and recruiters first, build-in-public audience second**.
+Per `~/AIOS/context/priorities.md`, Tier 0 is a full-time backend/ML role at a $70k
+floor, measured in submissions sent. This surface exists to make those submissions land.
 
-- **No framework, no bundler.** Pure HTML/CSS/JS only. Never suggest React, Vue, npm, webpack, etc.
-- **No external JS libraries** (no jQuery, no lodash). Vanilla JS only.
-- **No backend.** Everything is client-side. Persistence = localStorage + optional GitHub Gist sync.
-- **No new files** unless clearly required. Prefer editing existing files.
+Headline register: *"Backend and ML engineer. I ship systems end to end, not notebooks."*
+
+## The honesty rule
+
+**No metric appears in any README, page, or profile that is not reproducible from the repo.**
+
+This is the load-bearing rule. Nanthan has 2 stars and 2 followers. Portfolio formats
+that work for people with 60K-star repos - star charts, press logos, manifesto badges,
+follower counts - read as imitation when the proof underneath is absent, and that is
+worse than a plain honest page. Specificity is the substitute for scale:
+"284,807 transactions at a 577:1 imbalance, 2-5ms inference" beats any badge.
+
+Corollaries:
+- Never claim a skill that is not demonstrated by a repo here. The existing line "not claiming Kubernetes and Terraform until they're solid" is the standard.
+- Never link a demo without checking it returns 200 first. The flagship demo sat at 401 for weeks.
+- State the gaps. "Zero tests" on multipaste is a stronger signal than silence.
+
+## Hard constraints (the site)
+
+- **No framework, no bundler.** Pure HTML/CSS/JS. Never suggest React, Vue, npm, webpack.
+- **No external JS libraries.** Vanilla JS only.
+- **No backend.** Client-side only.
 - **No TypeScript.** Plain `.js` inside `<script>` tags.
+- **No new files** unless clearly required. Prefer editing existing ones.
 
----
+## Files
 
-## Design Tokens (CSS custom properties)
+| File | What |
+|---|---|
+| `index.html` | the portfolio (was `portfolio.html`) - dark, copper accent |
+| `case-fraud-pipeline.html` | deep technical walkthrough of the flagship |
+| `assets/diagrams/` | hand-authored SVG architecture diagrams |
+| `assets/shots/` | real screenshots, never mockups |
+| `assets/og-image.png` | social card, generated from the site itself |
+| `docs/` | the portfolio programme - never published (excluded in the deploy workflow) |
 
-Each page has its own design system — do not mix tokens across files.
+### Design tokens for `index.html`
 
-### `portfolio.html` (hiring surface — dark, copper accent)
 ```
 --bg: #07080f; --surface: #141728; --accent: #c9773a;
 --font-disp: 'Playfair Display'; --font-mono: 'DM Mono'; --font-body: 'DM Sans'
 ```
 
-### `mlops-career.html` (career intel — dark, cyan accent)
-```
---bg: #0a0c10; --surface: #111418; --accent: #00d4ff; --accent2: #7c3aed; --accent3: #22c55e
---font: 'Space Grotesk', 'IBM Plex Mono'
-```
+Do not introduce a second palette. The dashboard pages have their own systems;
+they are a different repo now and their tokens do not apply here.
 
-### `projects.html` (vault — dark, yellow-green accent)
-```
---bg: #0d0d0d; --accent: #e8ff3c; --accent2: #3cffb0
---font: 'Bebas Neue', 'DM Mono', 'Fraunces'
-```
+## Asset rules
 
-### `index.html` / `mobile.html` (schedule — dark, blue accent)
-Check `--accent` and font imports at top of each file.
+- Diagrams are **hand-authored SVG**, not exported images. They stay legible when scaled and diff cleanly in git.
+- Every diagram ships as a `<picture>` with a `prefers-color-scheme: dark` source so it reads on GitHub in both themes.
+- Screenshots are of **real running instances**. Never a mockup, never a doctored number.
+- Assets live here first, then get copied into the showcase repo under `docs/img/` so each repo is self-contained.
 
----
+## Deploy
 
-## localStorage Keys
+GitHub Actions: `html5validator` on every push and PR, then `peaceiris/actions-gh-pages`
+publishes the repo root to the `gh-pages` branch. `.github`, `CLAUDE.md`, `README.md`,
+`docs` and `profile` are excluded from what gets published.
 
-| Key | File | Purpose |
-|-----|------|---------|
-| `nanthan_vault_v2` | projects.html | All project cards |
-| `nanthan_vault_modified_at` | projects.html | Last modified timestamp |
-| `nanthan_vault_sync_v1` | projects.html | Gist sync config (gistId + token) |
-| `nanthan_mlops_progress_v1` | mlops-career.html | Section 3 checklist checkmarks |
-| `nanthan_jobs_v1` | mlops-career.html | Job application tracker entries |
-| `nanthan_theme_v1` | portfolio.html | light/dark theme preference |
+Because the repo is named `nanthansr.github.io`, Pages serves it at the bare root
+domain with no path prefix. That is the URL that goes on the resume.
 
-**GitHub tokens** in `nanthan_vault_sync_v1` are stored in localStorage — this is intentional (local-only tool). Never log or expose them.
+## Never
 
----
-
-## GitHub Gist Sync Pattern
-
-`projects.html` uses a proven pattern for cloud backup. The pattern is:
-1. Load from `localStorage` on init
-2. On "Sync Now": fetch remote Gist, compare `updatedAt` timestamps, push local if newer / pull remote if newer
-3. Gist file name: `projects-vault.json`, envelope: `{ schema, updatedAt, projects }`
-
-When porting this pattern to other files (e.g., job tracker), use a new Gist file name and storage key.
-
----
-
-## Navigation Bar Pattern
-
-All internal pages share a pill-style quick-nav in the header:
-```html
-<nav class="quick-nav" aria-label="Quick pages">
-  <a class="quick-link" href="mobile.html">Schedule</a>
-  <a class="quick-link" href="projects.html">Projects</a>
-  <a class="quick-link active" href="mlops-career.html">Career</a>
-  <a class="quick-link" href="workout-plan.html">Workout</a>
-  <a class="quick-link" href="portfolio.html">Portfolio</a>
-</nav>
-```
-The `active` class marks the current page. `portfolio.html` uses a different nav (fixed top nav with anchor links).
-
----
-
-## Section Numbering in `mlops-career.html`
-
-- Section 01: JD Skills Analysis
-- Section 02: AIOps Tools
-- Section 03: Fraud Pipeline Upgrade Checklist (interactive, localStorage-backed)
-- Section 04: Gap Analysis
-- Section 05: Interview Signals
-- Section 06: Montreal Target Companies
-- Section 07: 6-Week Roadmap
-- Section 08: Job Application Tracker (kanban, localStorage-backed)
-
----
-
-## Security Notes
-
-- The `cardHTML()` function in `projects.html` renders user-editable fields (`p.title`, `p.tagline`, `p.tags`) into innerHTML. Use `escapeHTML()` before injecting.
-- GitHub tokens are stored in localStorage under `nanthan_vault_sync_v1`. This is intentional — it's a local tool. Never expose in URLs, log statements, or page content.
-
----
-
-## Career Context
-
-**Goal:** MLOps / Cloud Engineer role in Montreal by Spring 2026 graduation.
-**Key projects:** Fraud Detection Pipeline (FastAPI + XGBoost + MLflow + Prometheus + Grafana + GitHub Actions CI/CD)
-**Target companies:** CGI, Nuance/Microsoft, National Bank, Lightspeed, CAE, Sanofi, Amazon, Shopify, Coveo
-**Cert in progress:** AWS SAA-C03
-**Honest gap:** Kubernetes (60% of JDs), Terraform (40% of JDs)
-
----
-
-## Recommended Execution Order for New Features
-
-1. Read the target file fully before suggesting any edits
-2. Reuse existing CSS classes before adding new ones
-3. Match the existing color palette (use design tokens, not hardcoded colors)
-4. Persist new interactive state to localStorage with a `nanthan_*_v1` key
-5. Add new sections to `mlops-career.html` by incrementing the section number
+- Never publish anything from `../dashboard/`. It holds target-company lists, a gap analysis, and a live job tracker. That content leaked publicly for months before the 2026-08-04 split; do not undo it.
+- Never commit a secret. Run `gitleaks detect --no-git` before flipping any repo to public.
+- Never change a repo's visibility without recording the call and its reason in `docs/VISIBILITY.tsv`.
+- Never link a URL from the profile README without curling it first.
