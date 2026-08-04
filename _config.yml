@@ -1,0 +1,10 @@
+# GitHub Pages serves this repo from the main branch root.
+# Anything listed here is not copied into the published site.
+#
+# docs/ holds the portfolio programme - the visibility ledger with its
+# reasoning, and README drafts. Version-controlled, never published.
+exclude:
+  - docs
+  - CLAUDE.md
+  - README.md
+  - .github

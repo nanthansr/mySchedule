@@ -77,12 +77,18 @@ they are a different repo now and their tokens do not apply here.
 
 ## Deploy
 
-GitHub Actions: `html5validator` on every push and PR, then `peaceiris/actions-gh-pages`
-publishes the repo root to the `gh-pages` branch. `.github`, `CLAUDE.md`, `README.md`,
-`docs` and `profile` are excluded from what gets published.
+Because the repo is named `nanthansr.github.io`, **GitHub Pages serves the `main`
+branch root directly** at the bare root domain, with no path prefix and no deploy
+action involved. Push to `main` and it is live. That is the URL that goes on the resume.
 
-Because the repo is named `nanthansr.github.io`, Pages serves it at the bare root
-domain with no path prefix. That is the URL that goes on the resume.
+What gets published is controlled by `_config.yml`, not by a workflow. `docs`,
+`CLAUDE.md`, `README.md` and `.github` are in its `exclude` list, so they stay in
+git but never reach the site. **If you add anything to this repo that must not be
+public, add it to that list in the same commit.**
+
+The one workflow, `.github/workflows/deploy.yml`, only runs `html5validator`. It has
+no deploy step; an earlier `peaceiris/actions-gh-pages` step was removed because it
+published to a `gh-pages` branch that Pages was not reading.
 
 ## Never
 
