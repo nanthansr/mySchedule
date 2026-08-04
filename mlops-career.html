@@ -319,7 +319,12 @@
     grid-template-columns: auto 1fr auto;
     gap: 14px;
     align-items: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    user-select: none;
   }
+
+  .check-item:hover { border-color: rgba(0,212,255,0.35); }
 
   .check-item.done {
     border-color: rgba(34,197,94,0.2);
@@ -335,6 +340,41 @@
     border-color: rgba(245,158,11,0.2);
     background: rgba(245,158,11,0.03);
   }
+
+  .check-item.user-checked {
+    border-color: rgba(34,197,94,0.45) !important;
+    background: rgba(34,197,94,0.08) !important;
+  }
+
+  /* Progress bar for Section 3 */
+  .checklist-progress-wrap {
+    margin-bottom: 14px;
+  }
+
+  .checklist-progress-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .checklist-progress-label span { color: var(--accent3); font-weight: 600; }
+
+  progress.mlops-bar {
+    width: 100%;
+    height: 6px;
+    border: none;
+    border-radius: 3px;
+    background: var(--border);
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  progress.mlops-bar::-webkit-progress-bar { background: var(--border); border-radius: 3px; }
+  progress.mlops-bar::-webkit-progress-value { background: var(--accent3); border-radius: 3px; transition: width 0.3s; }
+  progress.mlops-bar::-moz-progress-bar { background: var(--accent3); border-radius: 3px; }
 
   .check-icon {
     font-size: 16px;
@@ -545,6 +585,8 @@
     <a class="quick-link" href="projects.html">Projects</a>
     <a class="quick-link active" href="mlops-career.html">Career</a>
     <a class="quick-link" href="workout-plan.html">Workout</a>
+    <a class="quick-link" href="portfolio.html">Portfolio</a>
+    <a class="quick-link" href="case-fraud-pipeline.html">Case Study</a>
   </nav>
 </div>
 
@@ -754,9 +796,17 @@
       You're already past Stage 3. Below is what separates a "good portfolio project" from a "hire me for this exact role" portfolio project. Ordered by impact.
     </div>
 
+    <div class="checklist-progress-wrap">
+      <div class="checklist-progress-label">
+        MLOps Readiness — click items to track progress
+        <span id="progressLabel">0 / 13</span>
+      </div>
+      <progress class="mlops-bar" id="mlopsProgress" value="0" max="13"></progress>
+    </div>
+
     <div class="checklist">
 
-      <div class="check-item done">
+      <div class="check-item done" data-id="ci1" onclick="toggleCheck(this)">
         <div class="check-icon">✅</div>
         <div class="check-text">
           <strong>FastAPI serving layer with /predict endpoint</strong>
@@ -765,7 +815,7 @@
         <div class="check-stage">DONE</div>
       </div>
 
-      <div class="check-item done">
+      <div class="check-item done" data-id="ci2" onclick="toggleCheck(this)">
         <div class="check-icon">✅</div>
         <div class="check-text">
           <strong>Prometheus + Grafana monitoring stack</strong>
@@ -774,7 +824,7 @@
         <div class="check-stage">DONE</div>
       </div>
 
-      <div class="check-item done">
+      <div class="check-item done" data-id="ci3" onclick="toggleCheck(this)">
         <div class="check-icon">✅</div>
         <div class="check-text">
           <strong>GitHub Actions CI/CD pipeline (test → build)</strong>
@@ -783,7 +833,7 @@
         <div class="check-stage">DONE</div>
       </div>
 
-      <div class="check-item done">
+      <div class="check-item done" data-id="ci4" onclick="toggleCheck(this)">
         <div class="check-icon">✅</div>
         <div class="check-text">
           <strong>MLflow experiment tracking</strong>
@@ -792,7 +842,7 @@
         <div class="check-stage">DONE</div>
       </div>
 
-      <div class="check-item done">
+      <div class="check-item done" data-id="ci5" onclick="toggleCheck(this)">
         <div class="check-icon">✅</div>
         <div class="check-text">
           <strong>XGBoost with class imbalance handling (scale_pos_weight)</strong>
@@ -801,7 +851,7 @@
         <div class="check-stage">DONE</div>
       </div>
 
-      <div class="check-item next">
+      <div class="check-item next" data-id="ci6" onclick="toggleCheck(this)">
         <div class="check-icon">🔵</div>
         <div class="check-text">
           <strong>MLflow Model Registry — Stage 3</strong>
@@ -810,7 +860,7 @@
         <div class="check-stage">NEXT</div>
       </div>
 
-      <div class="check-item next">
+      <div class="check-item next" data-id="ci7" onclick="toggleCheck(this)">
         <div class="check-icon">🔵</div>
         <div class="check-text">
           <strong>Grafana dashboard — model metrics panel</strong>
@@ -819,7 +869,7 @@
         <div class="check-stage">HIGH IMPACT</div>
       </div>
 
-      <div class="check-item next">
+      <div class="check-item next" data-id="ci8" onclick="toggleCheck(this)">
         <div class="check-icon">🔵</div>
         <div class="check-text">
           <strong>Evidently AI drift detection integration</strong>
@@ -828,7 +878,7 @@
         <div class="check-stage">HIGH VALUE</div>
       </div>
 
-      <div class="check-item gap">
+      <div class="check-item gap" data-id="ci9" onclick="toggleCheck(this)">
         <div class="check-icon">⚠️</div>
         <div class="check-text">
           <strong>Cloud deployment (GCP Cloud Run or AWS ECS)</strong>
@@ -837,7 +887,7 @@
         <div class="check-stage">STAGE 4/5</div>
       </div>
 
-      <div class="check-item gap">
+      <div class="check-item gap" data-id="ci10" onclick="toggleCheck(this)">
         <div class="check-icon">⚠️</div>
         <div class="check-text">
           <strong>Kubernetes / basic container orchestration</strong>
@@ -846,7 +896,7 @@
         <div class="check-stage">GAP</div>
       </div>
 
-      <div class="check-item gap">
+      <div class="check-item gap" data-id="ci11" onclick="toggleCheck(this)">
         <div class="check-icon">⚠️</div>
         <div class="check-text">
           <strong>Infrastructure as Code (Terraform)</strong>
@@ -855,7 +905,7 @@
         <div class="check-stage">GAP</div>
       </div>
 
-      <div class="check-item gap">
+      <div class="check-item gap" data-id="ci12" onclick="toggleCheck(this)">
         <div class="check-icon">⚠️</div>
         <div class="check-text">
           <strong>Architecture diagram + README "How I used AI in this project" section</strong>
@@ -864,7 +914,7 @@
         <div class="check-stage">DOCS</div>
       </div>
 
-      <div class="check-item gap">
+      <div class="check-item gap" data-id="ci13" onclick="toggleCheck(this)">
         <div class="check-icon">⚠️</div>
         <div class="check-text">
           <strong>Incident simulation write-up</strong>
@@ -1054,6 +1104,297 @@
     </div>
   </div>
 
+  <!-- SECTION 8: JOB APPLICATION TRACKER -->
+  <div class="section" id="job-tracker">
+    <div class="section-header">
+      <span class="section-num">08</span>
+      <span class="section-title">Job Application Tracker</span>
+    </div>
+
+    <div class="callout">
+      Track every application. Hiring pipelines take 4–8 weeks — start now, track obsessively.
+    </div>
+
+    <!-- Add Job Form -->
+    <div id="jobFormWrap" style="display:none; background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:20px; margin-bottom:16px;">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+        <div>
+          <label style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Company</label>
+          <input id="jf-company" type="text" placeholder="e.g. Coveo" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:8px 12px;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:13px;outline:none;">
+        </div>
+        <div>
+          <label style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Role</label>
+          <input id="jf-role" type="text" placeholder="e.g. MLOps Engineer" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:8px 12px;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:13px;outline:none;">
+        </div>
+        <div>
+          <label style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">JD URL</label>
+          <input id="jf-url" type="url" placeholder="https://..." style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:8px 12px;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:13px;outline:none;">
+        </div>
+        <div>
+          <label style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Date Applied</label>
+          <input id="jf-date" type="date" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:8px 12px;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:13px;outline:none;">
+        </div>
+        <div>
+          <label style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Stage</label>
+          <select id="jf-stage" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:8px 12px;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:13px;outline:none;">
+            <option value="applied">Applied</option>
+            <option value="screen">Screen</option>
+            <option value="technical">Technical</option>
+            <option value="offer">Offer</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Notes</label>
+          <input id="jf-notes" type="text" placeholder="Any notes..." style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:8px 12px;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:13px;outline:none;">
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button onclick="saveJob()" style="background:var(--accent);color:var(--bg);border:none;border-radius:4px;padding:8px 20px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.06em;cursor:pointer;text-transform:uppercase;">Save</button>
+        <button onclick="document.getElementById('jobFormWrap').style.display='none'" style="background:none;color:var(--text-muted);border:1px solid var(--border);border-radius:4px;padding:8px 16px;font-family:'IBM Plex Mono',monospace;font-size:11px;cursor:pointer;">Cancel</button>
+      </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+      <div id="jobStats" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);"></div>
+      <button onclick="showJobForm()" style="background:rgba(0,212,255,0.1);color:var(--accent);border:1px solid rgba(0,212,255,0.25);border-radius:4px;padding:6px 16px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.06em;cursor:pointer;text-transform:uppercase;">+ Add Application</button>
+    </div>
+
+    <!-- Kanban columns -->
+    <div id="jobKanban" style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;overflow-x:auto;"></div>
+
+  </div>
+
 </div>
+
+<!-- Toast notification -->
+<div id="jobToast" style="position:fixed;bottom:24px;right:24px;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 18px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text);opacity:0;pointer-events:none;transition:opacity 0.25s;z-index:999;"></div>
+
+<script>
+// ── MLOPS PROGRESS TRACKER ──────────────────────────────────────────
+const PROGRESS_KEY = 'nanthan_mlops_progress_v1';
+
+function loadProgress() {
+  try { return JSON.parse(localStorage.getItem(PROGRESS_KEY) || '{}'); } catch(e) { return {}; }
+}
+
+function saveProgress(state) {
+  try { localStorage.setItem(PROGRESS_KEY, JSON.stringify(state)); } catch(e) {}
+}
+
+function toggleCheck(el) {
+  const id = el.dataset.id;
+  if (!id) return;
+  const state = loadProgress();
+  state[id] = !state[id];
+  saveProgress(state);
+  applyProgress(state);
+}
+
+function applyProgress(state) {
+  const items = document.querySelectorAll('.check-item[data-id]');
+  let checked = 0;
+  items.forEach(el => {
+    const id = el.dataset.id;
+    if (state[id]) {
+      el.classList.add('user-checked');
+      checked++;
+    } else {
+      el.classList.remove('user-checked');
+    }
+  });
+  const total = items.length;
+  const pct = total ? Math.round(checked / total * 100) : 0;
+  const bar = document.getElementById('mlopsProgress');
+  const label = document.getElementById('progressLabel');
+  if (bar) { bar.value = checked; bar.max = total; }
+  if (label) label.textContent = `${checked} / ${total} — ${pct}% MLOps ready`;
+}
+
+applyProgress(loadProgress());
+
+// ── JOB APPLICATION TRACKER ─────────────────────────────────────────
+const JOBS_KEY = 'nanthan_jobs_v1';
+
+const DEFAULT_JOBS = [
+  { id: 'j1', company: 'CGI Group',            role: 'MLOps Engineer',          url: '', date: '', stage: 'applied',  notes: 'Bilingual required. QC-based.' },
+  { id: 'j2', company: 'Nuance / Microsoft',   role: 'AI/ML Engineer',          url: '', date: '', stage: 'applied',  notes: 'Azure stack. NLP focus.' },
+  { id: 'j3', company: 'National Bank of Canada', role: 'MLOps Specialist',     url: '', date: '', stage: 'applied',  notes: 'Azure-dominant. Master\'s preferred.' },
+  { id: 'j4', company: 'Lightspeed',           role: 'Cloud/MLOps Engineer',    url: '', date: '', stage: 'applied',  notes: 'SaaS unicorn. Strong CI/CD culture.' },
+  { id: 'j5', company: 'CAE',                  role: 'ML/Cloud Engineer',       url: '', date: '', stage: 'applied',  notes: 'Aerospace. Less competitive.' },
+  { id: 'j6', company: 'Sanofi',               role: 'MLOps Engineer',          url: '', date: '', stage: 'applied',  notes: 'GCP + Python. Pharma AI.' },
+  { id: 'j7', company: 'Amazon (AWS Canada)',  role: 'Cloud Support Engineer',  url: '', date: '', stage: 'applied',  notes: 'AWS cert advantage.' },
+  { id: 'j8', company: 'Shopify',              role: 'MLOps / Platform Eng',    url: '', date: '', stage: 'applied',  notes: 'Remote. High bar. Worth applying.' },
+  { id: 'j9', company: 'Coveo',                role: 'ML Platform Engineer',    url: '', date: '', stage: 'applied',  notes: 'AWS + Python. Master\'s strongly preferred.' },
+];
+
+const STAGE_LABELS  = { applied: 'Applied', screen: 'Screen', technical: 'Technical', offer: 'Offer', rejected: 'Rejected' };
+const STAGE_COLORS  = {
+  applied:   { bg: 'rgba(100,116,139,0.12)',  border: 'rgba(100,116,139,0.25)', text: '#94a3b8' },
+  screen:    { bg: 'rgba(0,212,255,0.08)',    border: 'rgba(0,212,255,0.25)',   text: '#00d4ff' },
+  technical: { bg: 'rgba(124,58,237,0.1)',    border: 'rgba(124,58,237,0.25)', text: '#a78bfa' },
+  offer:     { bg: 'rgba(34,197,94,0.1)',     border: 'rgba(34,197,94,0.25)',  text: '#22c55e' },
+  rejected:  { bg: 'rgba(239,68,68,0.08)',    border: 'rgba(239,68,68,0.2)',   text: '#ef4444' },
+};
+const STAGE_ORDER = ['applied', 'screen', 'technical', 'offer', 'rejected'];
+
+let editingJobId = null;
+
+function loadJobs() {
+  try {
+    const saved = localStorage.getItem(JOBS_KEY);
+    if (saved) return JSON.parse(saved);
+  } catch(e) {}
+  return JSON.parse(JSON.stringify(DEFAULT_JOBS));
+}
+
+function saveJobsToStorage(jobs) {
+  try { localStorage.setItem(JOBS_KEY, JSON.stringify(jobs)); } catch(e) {}
+}
+
+function showJobToast(msg) {
+  const el = document.getElementById('jobToast');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.opacity = '1';
+  setTimeout(() => { el.style.opacity = '0'; }, 1800);
+}
+
+function showJobForm(id) {
+  const form = document.getElementById('jobFormWrap');
+  form.style.display = 'block';
+  if (id) {
+    editingJobId = id;
+    const jobs = loadJobs();
+    const job = jobs.find(j => j.id === id);
+    if (!job) return;
+    document.getElementById('jf-company').value = job.company || '';
+    document.getElementById('jf-role').value    = job.role    || '';
+    document.getElementById('jf-url').value     = job.url     || '';
+    document.getElementById('jf-date').value    = job.date    || '';
+    document.getElementById('jf-stage').value   = job.stage   || 'applied';
+    document.getElementById('jf-notes').value   = job.notes   || '';
+  } else {
+    editingJobId = null;
+    document.getElementById('jf-company').value = '';
+    document.getElementById('jf-role').value    = '';
+    document.getElementById('jf-url').value     = '';
+    document.getElementById('jf-date').value    = new Date().toISOString().split('T')[0];
+    document.getElementById('jf-stage').value   = 'applied';
+    document.getElementById('jf-notes').value   = '';
+  }
+  form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function saveJob() {
+  const company = document.getElementById('jf-company').value.trim();
+  const role    = document.getElementById('jf-role').value.trim();
+  if (!company) { alert('Company name is required.'); return; }
+
+  const jobs = loadJobs();
+  if (editingJobId) {
+    const idx = jobs.findIndex(j => j.id === editingJobId);
+    if (idx !== -1) {
+      jobs[idx] = {
+        ...jobs[idx],
+        company,
+        role:  document.getElementById('jf-role').value.trim(),
+        url:   document.getElementById('jf-url').value.trim(),
+        date:  document.getElementById('jf-date').value,
+        stage: document.getElementById('jf-stage').value,
+        notes: document.getElementById('jf-notes').value.trim(),
+      };
+    }
+    showJobToast('Updated');
+  } else {
+    const newId = 'j' + Date.now();
+    jobs.push({
+      id:      newId,
+      company,
+      role,
+      url:     document.getElementById('jf-url').value.trim(),
+      date:    document.getElementById('jf-date').value,
+      stage:   document.getElementById('jf-stage').value,
+      notes:   document.getElementById('jf-notes').value.trim(),
+    });
+    showJobToast('Added');
+  }
+
+  saveJobsToStorage(jobs);
+  document.getElementById('jobFormWrap').style.display = 'none';
+  renderJobs();
+}
+
+function deleteJob(id) {
+  if (!confirm('Remove this application?')) return;
+  const jobs = loadJobs().filter(j => j.id !== id);
+  saveJobsToStorage(jobs);
+  renderJobs();
+  showJobToast('Removed');
+}
+
+function updateStage(id, newStage) {
+  const jobs = loadJobs();
+  const job = jobs.find(j => j.id === id);
+  if (job) { job.stage = newStage; saveJobsToStorage(jobs); renderJobs(); }
+}
+
+function escapeJobStr(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function renderJobs() {
+  const jobs = loadJobs();
+  const kanban = document.getElementById('jobKanban');
+  const stats  = document.getElementById('jobStats');
+  if (!kanban) return;
+
+  // Stats
+  const total    = jobs.length;
+  const active   = jobs.filter(j => j.stage !== 'rejected').length;
+  const offers   = jobs.filter(j => j.stage === 'offer').length;
+  if (stats) stats.textContent = `${total} total · ${active} active · ${offers} offer${offers !== 1 ? 's' : ''}`;
+
+  // Build columns
+  kanban.innerHTML = STAGE_ORDER.map(stage => {
+    const col = STAGE_COLORS[stage];
+    const colJobs = jobs.filter(j => j.stage === stage);
+
+    const cards = colJobs.map(j => {
+      const urlHtml = j.url
+        ? `<a href="${escapeJobStr(j.url)}" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--accent);text-decoration:none;display:block;margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${escapeJobStr(j.url)}">JD Link ↗</a>`
+        : '';
+      const dateHtml = j.date ? `<span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-muted);">${escapeJobStr(j.date)}</span>` : '';
+      const notesHtml = j.notes ? `<div style="font-size:11px;color:var(--text-muted);margin-top:4px;line-height:1.4;">${escapeJobStr(j.notes)}</div>` : '';
+      const stageSelect = STAGE_ORDER.map(s =>
+        `<option value="${s}"${j.stage===s?' selected':''}>${STAGE_LABELS[s]}</option>`
+      ).join('');
+
+      return `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;margin-bottom:8px;">
+        <div style="font-weight:600;font-size:13px;color:#fff;">${escapeJobStr(j.company)}</div>
+        <div style="font-size:12px;color:var(--text-dim);margin-top:2px;">${escapeJobStr(j.role)}</div>
+        ${dateHtml}
+        ${urlHtml}
+        ${notesHtml}
+        <div style="margin-top:8px;display:flex;gap:6px;align-items:center;">
+          <select onchange="updateStage('${j.id}', this.value)" style="flex:1;background:var(--bg);border:1px solid var(--border);border-radius:3px;padding:3px 6px;color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:10px;outline:none;">${stageSelect}</select>
+          <button onclick="showJobForm('${j.id}')" style="background:none;border:1px solid var(--border);border-radius:3px;padding:3px 7px;color:var(--text-muted);font-size:10px;cursor:pointer;" title="Edit">✎</button>
+          <button onclick="deleteJob('${j.id}')" style="background:none;border:1px solid rgba(239,68,68,0.2);border-radius:3px;padding:3px 7px;color:#ef4444;font-size:10px;cursor:pointer;" title="Remove">✕</button>
+        </div>
+      </div>`;
+    }).join('');
+
+    return `<div style="min-width:160px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:${col.text};background:${col.bg};border:1px solid ${col.border};border-radius:4px;padding:4px 10px;margin-bottom:8px;text-align:center;">
+        ${STAGE_LABELS[stage]} <span style="opacity:0.6;">(${colJobs.length})</span>
+      </div>
+      ${cards || '<div style="font-size:11px;color:var(--text-muted);text-align:center;padding:8px 0;">—</div>'}
+    </div>`;
+  }).join('');
+}
+
+renderJobs();
+</script>
 </body>
 </html>

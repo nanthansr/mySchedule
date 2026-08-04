@@ -1395,11 +1395,20 @@ function getStatusLabel(s) {
   return { idea: 'Idea', active: 'Active', building: 'Building', research: 'Research' }[s] || 'Idea';
 }
 
+function escapeHTML(str) {
+  return String(str ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 function cardHTML(p) {
   const typeLabel = p.type === 'pro' ? 'Professional' : 'Experiment';
   const typeClass = p.type === 'pro' ? 'type-pro' : 'type-fun';
   const cardClass = p.type === 'pro' ? 'pro-card' : 'fun-card';
-  const tags = (p.tags || []).slice(0, 4).map(t => `<span class="tag">${t}</span>`).join('');
+  const tags = (p.tags || []).slice(0, 4).map(t => `<span class="tag">${escapeHTML(t)}</span>`).join('');
   return `
     <div class="card ${cardClass}" onclick="openModal('${p.id}')">
       <div class="card-accent-bar"></div>
@@ -1408,8 +1417,8 @@ function cardHTML(p) {
           <span class="card-number">#${p.id}</span>
           <span class="card-type ${typeClass}">${typeLabel}</span>
         </div>
-        <div class="card-title">${p.title}</div>
-        <div class="card-tagline">${p.tagline}</div>
+        <div class="card-title">${escapeHTML(p.title)}</div>
+        <div class="card-tagline">${escapeHTML(p.tagline)}</div>
         <div class="card-tags">${tags}</div>
         <div class="card-footer">
           <span class="status-pill ${getStatusClass(p.status)}">${getStatusLabel(p.status)}</span>
@@ -1582,13 +1591,13 @@ function openModal(id) {
       <span class="card-type ${typeClass}">${typeLabel}</span>
       <span class="status-pill ${getStatusClass(p.status)}">${getStatusLabel(p.status)}</span>
     </div>
-    <div class="modal-title">${p.title}</div>
-    <div class="modal-tagline">${p.tagline}</div>
+    <div class="modal-title">${escapeHTML(p.title)}</div>
+    <div class="modal-tagline">${escapeHTML(p.tagline)}</div>
     <div class="modal-section">
       <div class="modal-section-title">The Idea</div>
-      <div class="modal-text">${p.description}</div>
+      <div class="modal-text">${escapeHTML(p.description)}</div>
     </div>
-    ${(p.tags && p.tags.length) ? `<div class="modal-section"><div class="modal-section-title">Stack & Tags</div><div class="card-tags">${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div></div>` : ''}
+    ${(p.tags && p.tags.length) ? `<div class="modal-section"><div class="modal-section-title">Stack & Tags</div><div class="card-tags">${p.tags.map(t => `<span class="tag">${escapeHTML(t)}</span>`).join('')}</div></div>` : ''}
     ${researchHTML}
     <div class="modal-section">
       <div class="modal-section-title">Your Notes</div>
