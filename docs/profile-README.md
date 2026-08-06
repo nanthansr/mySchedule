@@ -34,7 +34,7 @@ Models degrade quietly. Feature distributions shift, confidence drifts, and by t
 
 **[Pomofocus](https://github.com/nanthansr/pomofocus)** - a macOS menu bar Pomodoro timer that never shows a number, because a visible countdown is itself a context switch. Native Swift, zero dependencies. Timing is anchored to an end date rather than a decrementing counter, so closing the lid mid-session doesn't corrupt the remaining time.
 
-**[Visual Français](https://github.com/nanthansr/visual-francais)** - paste in French text, click any word, get an AI-generated image association. Vanilla JS over a Python proxy to the Anthropic API, with an end-to-end test script.
+**[Visual Français](https://github.com/nanthansr/visual-francais)** - paste in French text, click any word, get an AI-generated image association. Vanilla JS over a Python proxy that keeps the Anthropic key off the client. Four Playwright end-to-end tests, written in French.
 
 **[Two-tier AWS architecture](https://github.com/nanthansr/aws-two-tier-project)** - FastAPI and React containerised onto EC2. A brownfield DevOps exercise, written up as a six-part series on the blog.
 
