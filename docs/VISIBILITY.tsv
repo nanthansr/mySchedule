@@ -4,9 +4,9 @@ mySchedule	public	public	rename	site	Becomes nanthansr.github.io so Pages serves
 dashboard	-	private	create	private	Private daily pages split out of mySchedule. Job tracker, gap analysis, target companies. Must never be public.
 mlops-fraud-pipeline	public	public	showcase	showcase	Flagship. Only repo with real CI, Docker, MLflow history and a demo. Numbers are reproducible from the repo.
 scAnki	private	public	rename+publish	showcase	Becomes carnet-snap. Live at carnet-snap.onrender.com, 16 test files, FastAPI + Swift iOS client. BLOCKED until .env is purged from history and both keys are rotated.
-multipaste	public	public	showcase	showcase	Genuinely shipped: built .app, Sparkle appcast, landing page, demo GIF. Honest gap to state: zero tests.
-pomofocus	-	public	create	showcase	Native Swift menu-bar app with a real design thesis and a Tests target. Currently local-only and not even in projects/index.md.
-learn-buddy	public	public	showcase	showcase	Only collaborative team project. CI, docker-compose, DECISIONS.md, SECURITY.md. Best evidence of how he works with others.
+multipaste	public	private	private	hide	Real engineering (CGEventTap, echo suppression, Sparkle+EdDSA verified E2E) but the public README sold a product nobody could get: no GitHub release, no DMG, Gumroad 'link coming soon'. production-audit.md still lists 4 open P0s including telemetry-on-by-default against a landing page claiming none. Private until it is genuinely shippable. 2026-08-06.
+pomofocus	-	public	created	showcase	Native Swift menu bar app, builds clean, 5 tests, zero dependencies, no network calls, and it promises nothing it cannot deliver - the opposite of multipaste's problem. Fills the native-macOS slot. Created public 2026-08-06.
+learn-buddy	public	private	private	hide	One commit, an initial scaffold. README lists a team as [INSE Friend] / [Friend 3] / [Friend 4] - unfilled placeholders - and Nanthan is the only committer. 21 real tests and CI, but it cannot be presented as a shipped team project. 2026-08-06.
 visual-francais	public	public	tidy	supporting	Working tool with Playwright tests and a SPEC/DEVLOG. Solid but narrow. Description and topics only, no images.
 aws-two-tier-project	public	public	tidy	supporting	Cleanest infrastructure story in the set. Stale since March and no CI, but it is a real deploy.
 dsms_distributed_share_market	public	public	tidy	supporting	Concordia distributed-systems coursework in Java. Relevant to backend roles; keep as academic depth.

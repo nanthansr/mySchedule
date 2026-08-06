@@ -24,7 +24,7 @@ Models degrade quietly. Feature distributions shift, confidence drifts, and by t
 - **Alerts that are tested, not assumed.** `simulate_incident.py` replays a fraud spike and a distribution shift and proves the Grafana rules actually fire.
 - Runs at **$0/month** on an Oracle Cloud Always Free ARM VM behind Nginx, after an earlier AWS ECS Fargate deploy using keyless OIDC.
 
-[Repo](https://github.com/nanthansr/mlops-fraud-pipeline) · [full technical walkthrough](https://nanthansr.github.io/case-fraud-pipeline.html)
+[Repo](https://github.com/nanthansr/mlops-fraud-pipeline) · [full technical walkthrough](https://nanthansr.github.io/case-fraud-pipeline.html) · live demo moving to Hugging Face Spaces
 
 `Python` `XGBoost` `FastAPI` `MLflow` `Evidently` `Prometheus` `Grafana` `Docker` `GitHub Actions` `AWS`
 
@@ -32,11 +32,9 @@ Models degrade quietly. Feature distributions shift, confidence drifts, and by t
 
 ## Also built
 
-**[Multipaste](https://github.com/nanthansr/multipaste)** - a macOS clipboard buffer for rapid sequential copy-paste rather than long-term history. Native Swift, shipped as a built `.app` with a Sparkle update channel. Honest gap: no test suite yet.
+**[Pomofocus](https://github.com/nanthansr/pomofocus)** - a macOS menu bar Pomodoro timer that never shows a number, because a visible countdown is itself a context switch. Native Swift, zero dependencies. Timing is anchored to an end date rather than a decrementing counter, so closing the lid mid-session doesn't corrupt the remaining time.
 
-**[Learn-buddy](https://github.com/nanthansr/learn-buddy)** - matchmaking for study partners, built with a cross-disciplinary grad team. FastAPI, Postgres, docker-compose, CI on every push. The part worth reading is `DECISIONS.md`: it records what we chose and what we rejected.
-
-**[Visual Français](https://github.com/nanthansr/visual-francais)** - paste in French text, click any word, get an AI-generated image association. Vanilla JS over a Python proxy to the Anthropic API, with Playwright end-to-end tests.
+**[Visual Français](https://github.com/nanthansr/visual-francais)** - paste in French text, click any word, get an AI-generated image association. Vanilla JS over a Python proxy to the Anthropic API, with an end-to-end test script.
 
 **[Two-tier AWS architecture](https://github.com/nanthansr/aws-two-tier-project)** - FastAPI and React containerised onto EC2. A brownfield DevOps exercise, written up as a six-part series on the blog.
 

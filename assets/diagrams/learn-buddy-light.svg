@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 268" width="900" height="268" role="img" aria-label="A learner profile of topic, pace and availability goes into a FastAPI matching service, which queries Postgres for overlapping windows and returns ranked partner matches. The whole stack runs from one docker-compose file, and GitHub Actions runs the test suite on every push before anything merges.">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#8c959f"/></marker></defs>
+<rect width="900" height="268" fill="#ffffff"/>
+<rect x="0" y="8" width="900" height="150" rx="8" fill="#f6f8fa"/>
+<text x="16" y="28" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="600" fill="#a0a8b0" letter-spacing="1.4">REQUEST</text>
+<rect x="96" y="42" width="160" height="46" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+<text x="176.0" y="58.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="600" fill="#1f2328">Learner profile</text>
+<text x="176.0" y="72.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="10.5" font-weight="400" fill="#656d76">topic · pace · times</text>
+<rect x="310" y="42" width="160" height="46" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+<text x="390.0" y="58.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="600" fill="#1f2328">FastAPI</text>
+<text x="390.0" y="72.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="10.5" font-weight="400" fill="#656d76">matching service</text>
+<rect x="524" y="42" width="160" height="46" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+<text x="604.0" y="58.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="600" fill="#1f2328">PostgreSQL</text>
+<text x="604.0" y="72.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="10.5" font-weight="400" fill="#656d76">overlap query</text>
+<rect x="738" y="42" width="110" height="46" rx="6" fill="#fff4ec" stroke="#e8b48c" stroke-width="1"/>
+<text x="793.0" y="58.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="600" fill="#bd5d1f">Ranked pairs</text>
+<text x="793.0" y="72.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="10.5" font-weight="400" fill="#656d76">best fit first</text>
+<rect x="96" y="200" width="374" height="46" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+<text x="283.0" y="216.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="600" fill="#1f2328">docker-compose</text>
+<text x="283.0" y="230.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="10.5" font-weight="400" fill="#656d76">api + db + frontend, one command</text>
+<rect x="524" y="200" width="324" height="46" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+<text x="686.0" y="216.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="600" fill="#1f2328">GitHub Actions</text>
+<text x="686.0" y="230.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="10.5" font-weight="400" fill="#656d76">tests run on every push, before merge</text>
+<path d="M 256 65 L 306 65" stroke="#8c959f" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+<path d="M 470 65 L 520 65" stroke="#8c959f" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+<path d="M 684 65 L 734 65" stroke="#8c959f" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+<path d="M 283 196 L 283 100" stroke="#8c959f" stroke-width="1.4" fill="none" marker-end="url(#a)" stroke-dasharray="4 3"/>
+<path d="M 686 196 L 686 100" stroke="#8c959f" stroke-width="1.4" fill="none" marker-end="url(#a)" stroke-dasharray="4 3"/>
+<text x="291" y="150" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="400" fill="#656d76">runs the whole stack locally</text>
+<text x="694" y="150" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="400" fill="#656d76">gates the merge</text>
+</svg>

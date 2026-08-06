@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 372" width="900" height="372" role="img" aria-label="Two paths. Capture: macOS gives no clipboard notification, so a 200 millisecond timer polls the pasteboard change count; concealed and transient types from password managers are dropped, and the rest is stored in SQLite. Paste: a global CGEventTap intercepts command-shift-V before the focused app sees it, a heads-up display renders at the text cursor, and the selected clip is injected as a synthetic keystroke. An echo guard sits between the two paths so the app never re-captures the text it just injected.">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#6e7681"/></marker></defs>
+<rect width="900" height="372" fill="#0d1117"/>
+<rect x="0" y="8" width="900" height="150" rx="8" fill="#12171e"/>
+<text x="16" y="28" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="600" fill="#5a626b" letter-spacing="1.4">CAPTURE</text>
+<rect x="0" y="168" width="900" height="150" rx="8" fill="#12171e"/>
+<text x="16" y="188" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="600" fill="#5a626b" letter-spacing="1.4">PASTE</text>
+<rect x="96" y="42" width="160" height="46" rx="6" fill="#161b22" stroke="#3d444d" stroke-width="1"/>
+<text x="176.0" y="58.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="600" fill="#e6edf3">200 ms timer</text>
+<text x="176.0" y="72.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="10.5" font-weight="400" fill="#9198a1">no notification exists</text>
+<rect x="310" y="42" width="160" height="46" rx="6" fill="#161b22" stroke="#3d444d" stroke-width="1"/>
+<text x="390.0" y="58.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="600" fill="#e6edf3">changeCount</text>
+<text x="390.0" y="72.0" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="400" fill="#9198a1">changed since last?</text>
+<rect x="524" y="42" width="160" height="46" rx="6" fill="#2b1d12" stroke="#6b4426" stroke-width="1"/>
+<text x="604.0" y="58.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="600" fill="#e8955a">Privacy filter</text>
+<text x="604.0" y="72.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="10.5" font-weight="400" fill="#9198a1">drop concealed types</text>
+<rect x="738" y="42" width="110" height="46" rx="6" fill="#161b22" stroke="#3d444d" stroke-width="1"/>
+<text x="793.0" y="58.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="600" fill="#e6edf3">SQLite</text>
+<text x="793.0" y="72.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="10.5" font-weight="400" fill="#9198a1">clip history</text>
+<rect x="96" y="202" width="160" height="46" rx="6" fill="#161b22" stroke="#3d444d" stroke-width="1"/>
+<text x="176.0" y="218.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="600" fill="#e6edf3">CGEventTap</text>
+<text x="176.0" y="232.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="10.5" font-weight="400" fill="#9198a1">⌘⇧V, before the app</text>
+<rect x="310" y="202" width="160" height="46" rx="6" fill="#161b22" stroke="#3d444d" stroke-width="1"/>
+<text x="390.0" y="218.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="600" fill="#e6edf3">Radial HUD</text>
+<text x="390.0" y="232.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="10.5" font-weight="400" fill="#9198a1">drawn at the caret</text>
+<rect x="524" y="202" width="160" height="46" rx="6" fill="#161b22" stroke="#3d444d" stroke-width="1"/>
+<text x="604.0" y="218.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="600" fill="#e6edf3">Inject keystroke</text>
+<text x="604.0" y="232.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="10.5" font-weight="400" fill="#9198a1">synthetic ⌘V</text>
+<rect x="738" y="202" width="110" height="46" rx="6" fill="#161b22" stroke="#3d444d" stroke-width="1"/>
+<text x="793.0" y="218.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="600" fill="#e6edf3">Focused app</text>
+<text x="793.0" y="232.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="10.5" font-weight="400" fill="#9198a1">receives paste</text>
+<path d="M 256 65 L 306 65" stroke="#6e7681" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+<path d="M 470 65 L 520 65" stroke="#6e7681" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+<path d="M 684 65 L 734 65" stroke="#6e7681" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+<path d="M 256 225 L 306 225" stroke="#6e7681" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+<path d="M 470 225 L 520 225" stroke="#6e7681" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+<path d="M 684 225 L 734 225" stroke="#6e7681" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+<path d="M 793 88 L 793 132 L 390 132 L 390 198" stroke="#6e7681" stroke-width="1.4" fill="none" marker-end="url(#a)" stroke-dasharray="4 3"/>
+<path d="M 604 198 L 604 92" stroke="#6e7681" stroke-width="1.4" fill="none" marker-end="url(#a)" stroke-dasharray="4 3"/>
+<text x="398" y="126" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="400" fill="#9198a1">cycle through recent clips</text>
+<text x="614" y="170" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="400" fill="#9198a1">echo guard:</text>
+<text x="614" y="184" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="400" fill="#9198a1">skip our own paste</text>
+<text x="96" y="344" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="11" fill="#9198a1"><tspan fill="#e8955a" font-weight="600">Without that guard</tspan> every paste re-enters the history as a fresh clip and the buffer eats itself.</text>
+</svg>

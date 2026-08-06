@@ -1,0 +1,55 @@
+<!-- Source for assets/og-image.png (the social card).
+     Not published: _config.yml excludes nothing here, so this file does ship,
+     but it is harmless and keeping it next to the output makes the card
+     regenerable instead of a one-off screenshot.
+
+     To regenerate: serve the repo, open this at exactly 1200x630, screenshot,
+     crop to the card. Keep the copy in sync with the profile README headline. -->
+<meta charset="utf-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@300;400&display=swap');
+  html,body{margin:0;padding:0}
+  body{width:1200px;height:630px;overflow:hidden}
+  .card{
+    width:1200px;height:630px;box-sizing:border-box;
+    padding:64px 76px;
+    background:
+      radial-gradient(900px 520px at 12% -10%, #16224a 0%, transparent 62%),
+      radial-gradient(760px 520px at 96% 108%, #3a1c34 0%, transparent 60%),
+      #07080f;
+    color:#f2f4f8;
+    display:flex;flex-direction:column;justify-content:space-between;
+  }
+  .eyebrow{
+    font-family:'DM Mono',monospace;font-size:19px;letter-spacing:.24em;
+    text-transform:uppercase;color:#c9773a;
+  }
+  h1{
+    font-family:'Syne',sans-serif;font-weight:800;font-size:52px;line-height:1.12;
+    margin:22px 0 0;letter-spacing:-.02em;max-width:1040px;
+  }
+  h1 em{font-style:normal;color:#c9773a}
+  .sub{
+    font-family:'Space Grotesk',sans-serif;font-weight:300;font-size:25px;
+    color:#9aa3b8;margin-top:26px;max-width:900px;line-height:1.4;
+  }
+  .foot{display:flex;align-items:center;justify-content:space-between}
+  .name{font-family:'Syne',sans-serif;font-weight:700;font-size:30px}
+  .name span{color:#c9773a}
+  .url{font-family:'DM Mono',monospace;font-size:22px;color:#7e879c}
+  .rule{height:3px;width:96px;background:#c9773a;border-radius:2px;margin-bottom:30px}
+</style>
+<div class="card">
+  <div>
+    <div class="eyebrow">Montréal, QC</div>
+    <h1>Backend &amp; ML engineer.<br>I ship systems <em>end to end</em>,<br>not notebooks.</h1>
+    <div class="sub">Fraud detection over 284,807 transactions · drift monitoring that actually alerts · native macOS apps in Swift</div>
+  </div>
+  <div>
+    <div class="rule"></div>
+    <div class="foot">
+      <div class="name">Nanthan <span>SR</span></div>
+      <div class="url">nanthansr.github.io</div>
+    </div>
+  </div>
+</div>
