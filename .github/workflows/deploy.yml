@@ -19,6 +19,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Catches a hand-edit to index.html that drifted from data/*.json.
+      # The generated sections are the ones a stale edit would silently break.
+      - name: Check generated output matches data/
+        run: python scripts/build-site.py --check
+
       - name: Validate HTML
         uses: Cyb3r-Jak3/html5validator-action@v7.2.0
         with:

@@ -1,0 +1,58 @@
+{
+  "_comment": "Blog posts, newest first. Edit here, then run: python scripts/build-site.py. Deliberately manual rather than fetched at page load - a client-side fetch would hide these from the AI crawlers llms.txt exists for, and would break silently. Refresh from https://nandytriesthings.hashnode.dev/rss.xml.",
+
+  "publications": [
+    {
+      "name": "nandy.triesthings",
+      "platform": "Hashnode",
+      "url": "https://nandytriesthings.hashnode.dev/",
+      "feed": "https://nandytriesthings.hashnode.dev/rss.xml",
+      "description": "Seven posts so far, all from early 2026, mostly the AWS two-tier build. Dormant since March; starting again now."
+    }
+  ],
+
+  "posts": [
+    {
+      "title": "What I Actually Learned Building a Two-Tier AWS Architecture From Scratch",
+      "url": "https://nandytriesthings.hashnode.dev/what-i-actually-learned-building-a-two-tier-aws-architecture-from-scratch",
+      "date": "2026-03-02",
+      "publication": "Hashnode"
+    },
+    {
+      "title": "It's Live on the Internet. That's Not Cliché - That's the Point.",
+      "url": "https://nandytriesthings.hashnode.dev/it-s-live-on-the-internet-that-s-not-clich-that-s-the-point",
+      "date": "2026-03-02",
+      "publication": "Hashnode"
+    },
+    {
+      "title": "The Frontend Gauntlet: Four Errors, One Evening, Zero App Code Changed",
+      "url": "https://nandytriesthings.hashnode.dev/the-frontend-gauntlet-four-errors-one-evening-zero-app-code-changed",
+      "date": "2026-03-02",
+      "publication": "Hashnode"
+    },
+    {
+      "title": "Three Bugs. One Night. This Is What DevOps Actually Looks Like.",
+      "url": "https://nandytriesthings.hashnode.dev/three-bugs-one-night-this-is-what-devops-actually-looks-like",
+      "date": "2026-02-24",
+      "publication": "Hashnode"
+    },
+    {
+      "title": "Before You Touch AWS, You Need to Think Like Linux",
+      "url": "https://nandytriesthings.hashnode.dev/before-you-touch-aws-you-need-to-think-like-linux",
+      "date": "2026-02-20",
+      "publication": "Hashnode"
+    },
+    {
+      "title": "Why I Abandoned \"Toy Apps\" for a Two-Tier Architecture",
+      "url": "https://nandytriesthings.hashnode.dev/why-i-abandoned-toy-apps-for-a-two-tier-architecture",
+      "date": "2026-02-11",
+      "publication": "Hashnode"
+    },
+    {
+      "title": "Why I Started nandy.triesthings",
+      "url": "https://nandytriesthings.hashnode.dev/why-i-started-nandytriesthings",
+      "date": "2026-01-30",
+      "publication": "Hashnode"
+    }
+  ]
+}

@@ -3,8 +3,11 @@
 #
 # docs/ holds the portfolio programme - the visibility ledger with its
 # reasoning, and README drafts. Version-controlled, never published.
+# data/ is deliberately NOT excluded: a machine-readable feed of the projects
+# is useful to anything reading this site, and it holds nothing private.
 exclude:
   - docs
+  - scripts
   - CLAUDE.md
   - README.md
   - .github

@@ -218,9 +218,147 @@ DIAGRAMS["learn-buddy"] = {
     ],
 }
 
+DIAGRAMS["culprit"] = {
+    "size": (900, 400),
+    "alt": ("Three lanes. Record: the agent runs N times on the PR branch, a DecisionRecorder "
+            "marks which steps actually made a stochastic decision, the rest are dropped because "
+            "replaying them is provably a no-op, and LangGraph leaves a checkpoint before every "
+            "step. Replay: rewind to the checkpoint before step k, re-roll that one decision and "
+            "let everything downstream run fresh, repeat round-robin so every candidate step gets "
+            "the same number of samples, and read off the shift in failure rate per step. Gate: "
+            "compare the observed rate against the baseline committed in .culprit/baseline.json, "
+            "and only if it regressed does attribution run and the process exit 1 with a markdown "
+            "report for the pull request."),
+    "lanes": [(8, 108, "RECORD"), (126, 108, "REPLAY"), (244, 148, "GATE")],
+    "boxes": [
+        dict(x=96,  y=40,  w=168, lines=[("Agent run", "head"), ("PR branch, N runs", "sub")]),
+        dict(x=320, y=40,  w=150, lines=[("DecisionRecorder", "head"), ("which steps rolled?", "sub")]),
+        dict(x=534, y=40,  w=150, lines=[("Candidate steps", "head"), ("no-op steps dropped", "sub")], accent=True),
+        dict(x=748, y=40,  w=110, lines=[("Checkpoints", "head"), ("one before each", "sub")]),
+        dict(x=96,  y=158, w=168, lines=[("Rewind to step k", "head"), ("LangGraph checkpoint", "sub")]),
+        dict(x=320, y=158, w=150, lines=[("Re-roll step k", "head"), ("downstream runs fresh", "sub")]),
+        dict(x=534, y=158, w=150, lines=[("K times, round-robin", "head"), ("equal samples per step", "sub")], accent=True),
+        dict(x=748, y=158, w=110, lines=[("Effect", "head"), ("shift in fail rate", "sub")]),
+        dict(x=96,  y=282, w=168, lines=[("Baseline", "head"), (".culprit/baseline.json", "mono")]),
+        dict(x=320, y=282, w=150, lines=[("Regressed?", "head"), ("rate vs baseline", "sub")]),
+        dict(x=534, y=282, w=150, lines=[("attribute()", "head"), ("rank the candidates", "sub")]),
+        dict(x=748, y=282, w=110, lines=[("exit 1", "head"), ("+ report.md", "mono")], accent=True),
+    ],
+    "arrows": [
+        {"pts": [(264, 63), (316, 63)]},
+        {"pts": [(470, 63), (530, 63)]},
+        {"pts": [(684, 63), (744, 63)]},
+        {"pts": [(264, 181), (316, 181)]},
+        {"pts": [(470, 181), (530, 181)]},
+        {"pts": [(684, 181), (744, 181)]},
+        {"pts": [(264, 305), (316, 305)]},
+        {"pts": [(470, 305), (530, 305)]},
+        {"pts": [(684, 305), (744, 305)]},
+        # only the candidate steps are worth replaying
+        {"pts": [(609, 86), (609, 154)], "dashed": True},
+        # measured effects feed the ranking
+        {"pts": [(803, 204), (803, 254), (609, 254), (609, 278)], "dashed": True},
+    ],
+    "labels": [
+        {"x": 619, "y": 119, "s": "only these get replayed"},
+        {"x": 619, "y": 246, "s": "effects feed the ranking"},
+        {"x": 478, "y": 298, "s": "no", "anchor": "middle"},
+    ],
+    "notes": [{"x": 96, "y": 348, "lead": "Replay is the expensive half,",
+               "rest": "so it only runs once the gate has already tripped. A clean branch never pays for it."}],
+}
+
+DIAGRAMS["visual-francais"] = {
+    "size": (900, 268),
+    "alt": ("French text is pasted into a vanilla JavaScript page in the browser. Clicking a word "
+            "sends it to a small Python proxy, which holds the Anthropic API key so it never "
+            "reaches the client, and calls the Anthropic API. An image association comes back and "
+            "renders beside the word instead of an English translation. Four Playwright end-to-end "
+            "tests, written in French, drive the whole path."),
+    "lanes": [(8, 150, "REQUEST")],
+    "boxes": [
+        dict(x=96,  y=42,  w=160, lines=[("French text", "head"), ("click any word", "sub")]),
+        dict(x=310, y=42,  w=160, lines=[("Python proxy", "head"), ("key stays server-side", "sub")], accent=True),
+        dict(x=524, y=42,  w=160, lines=[("Anthropic API", "head"), ("word to association", "sub")]),
+        dict(x=738, y=42,  w=110, lines=[("Image", "head"), ("no translation", "sub")]),
+        dict(x=96,  y=200, w=374, lines=[("Vanilla JS in the browser", "head"), ("no framework, no build step", "sub")]),
+        dict(x=524, y=200, w=324, lines=[("Playwright", "head"), ("four end-to-end tests, written in French", "sub")]),
+    ],
+    "arrows": [
+        {"pts": [(256, 65), (306, 65)]},
+        {"pts": [(470, 65), (520, 65)]},
+        {"pts": [(684, 65), (734, 65)]},
+        {"pts": [(283, 196), (283, 100)], "dashed": True},
+        {"pts": [(686, 196), (686, 100)], "dashed": True},
+    ],
+    "labels": [
+        {"x": 291, "y": 150, "s": "renders the result"},
+        {"x": 694, "y": 150, "s": "drives the whole path"},
+    ],
+}
+
+DIAGRAMS["aws-two-tier"] = {
+    "size": (900, 268),
+    "alt": ("A browser request reaches Nginx on the public application tier, which serves the "
+            "React build and proxies API calls to a FastAPI container on the same EC2 instance. "
+            "FastAPI talks to the data tier, which sits in a private subnet reachable only from "
+            "the application tier security group. Both tiers are containerised and live inside "
+            "one VPC, with security groups rather than open ports separating them."),
+    "lanes": [(8, 150, "REQUEST")],
+    "boxes": [
+        dict(x=96,  y=42,  w=160, lines=[("Browser", "head"), ("public internet", "sub")]),
+        dict(x=310, y=42,  w=160, lines=[("Nginx on EC2", "head"), ("serves React, proxies /api", "sub")]),
+        dict(x=524, y=42,  w=160, lines=[("FastAPI container", "head"), ("application tier", "sub")]),
+        dict(x=738, y=42,  w=110, lines=[("Data tier", "head"), ("private subnet", "sub")], accent=True),
+        dict(x=96,  y=200, w=374, lines=[("One VPC", "head"), ("public and private subnets, not one flat network", "sub")]),
+        dict(x=524, y=200, w=324, lines=[("Security groups", "head"), ("the data tier accepts only the app tier", "sub")]),
+    ],
+    "arrows": [
+        {"pts": [(256, 65), (306, 65)]},
+        {"pts": [(470, 65), (520, 65)]},
+        {"pts": [(684, 65), (734, 65)]},
+        {"pts": [(283, 196), (283, 100)], "dashed": True},
+        {"pts": [(686, 196), (686, 100)], "dashed": True},
+    ],
+    "labels": [
+        {"x": 291, "y": 150, "s": "holds both tiers"},
+        {"x": 694, "y": 150, "s": "no open ports between them"},
+    ],
+}
+
+DIAGRAMS["pomofocus"] = {
+    "size": (900, 268),
+    "alt": ("Starting a session stores an end date rather than a countdown number. On every tick "
+            "the menu bar ring is redrawn from the gap between now and that end date, so the ring "
+            "ripens instead of digits ticking down, and the session ends when now passes the end "
+            "date. Because the truth is a date and not a counter, closing the lid mid-session and "
+            "reopening it later leaves the remaining time correct, where a decrementing counter "
+            "would have drifted."),
+    "lanes": [(8, 150, "SESSION")],
+    "boxes": [
+        dict(x=96,  y=42,  w=160, lines=[("Start", "head"), ("store an end date", "sub")], accent=True),
+        dict(x=310, y=42,  w=160, lines=[("Every tick", "head"), ("now vs end date", "sub")]),
+        dict(x=524, y=42,  w=160, lines=[("Ring redraws", "head"), ("no digits, ever", "sub")]),
+        dict(x=738, y=42,  w=110, lines=[("Done", "head"), ("now passes end", "sub")]),
+        dict(x=96,  y=200, w=374, lines=[("Lid closes, app sleeps", "head"), ("a decrementing counter would drift here", "sub")]),
+        dict(x=524, y=200, w=324, lines=[("Swift, zero dependencies", "head"), ("five tests, no network calls at all", "sub")]),
+    ],
+    "arrows": [
+        {"pts": [(256, 65), (306, 65)]},
+        {"pts": [(470, 65), (520, 65)]},
+        {"pts": [(684, 65), (734, 65)]},
+        {"pts": [(283, 196), (283, 100)], "dashed": True},
+    ],
+    "labels": [
+        {"x": 291, "y": 150, "s": "the date is still true on wake"},
+    ],
+    "notes": [{"x": 524, "y": 258, "lead": "A visible countdown is itself a context switch",
+               "rest": "- you look at it, and the looking is the interruption."}],
+}
+
 if __name__ == "__main__":
     for name, spec in DIAGRAMS.items():
         for theme, t in THEMES.items():
             p = OUT / f"{name}-{theme}.svg"
-            p.write_text(render(spec, t))
+            p.write_text(render(spec, t), encoding="utf-8")
             print(f"wrote {p.name} ({p.stat().st_size} bytes)")

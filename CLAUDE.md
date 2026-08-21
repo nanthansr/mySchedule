@@ -46,12 +46,34 @@ Corollaries:
 - **No backend.** Client-side only.
 - **No TypeScript.** Plain `.js` inside `<script>` tags.
 - **No new files** unless clearly required. Prefer editing existing ones.
+- **Nothing that matters may be rendered by JavaScript.** Text painted in at
+  runtime is invisible to AI crawlers, text extractors and link-preview
+  scrapers. Generate it into the HTML instead.
+
+## Adding a project
+
+Do not hand-edit the projects section of `index.html`. It is generated.
+
+1. Add a `DIAGRAMS` entry in `assets/diagrams/build.py`, then
+   `python assets/diagrams/build.py`. Real screenshot instead of a diagram is
+   fine; a fabricated mock-up is not.
+2. Add an entry to `data/projects.json`. Every string in `facts` must be
+   reproducible from the repo.
+3. `python scripts/build-site.py`.
+4. Commit the JSON, the SVGs and the regenerated files together.
+
+`python scripts/build-site.py --check` fails if the committed HTML has drifted
+from the data. The three markers - `projects`, `writing`, `jsonld` - delimit
+what the generator owns; everything else in `index.html` is hand-written.
 
 ## Files
 
 | File | What |
 |---|---|
-| `index.html` | the portfolio (was `portfolio.html`) - dark, copper accent |
+| `index.html` | the portfolio (was `portfolio.html`) - black, blue accent with copper secondary |
+| `data/projects.json` | **every project on the site.** Adding a project starts and ends here |
+| `data/posts.json` | blog publications and posts |
+| `scripts/build-site.py` | turns those two files into HTML, `llms.txt`, `robots.txt`, `sitemap.xml` |
 | `case-fraud-pipeline.html` | deep technical walkthrough of the flagship |
 | `assets/diagrams/` | hand-authored SVG architecture diagrams |
 | `assets/shots/` | real screenshots, never mockups |
@@ -61,11 +83,12 @@ Corollaries:
 ### Design tokens for `index.html`
 
 ```
---bg: #07080f; --surface: #141728; --accent: #c9773a;
---font-disp: 'Playfair Display'; --font-mono: 'DM Mono'; --font-body: 'DM Sans'
+--bg: #000000; --surface: #111111; --accent: #4B9EFF; --accent2: #e8865a;
+--font-disp: 'Syne'; --font-body: 'Space Grotesk'; --font-mono: 'DM Mono'
 ```
 
-Do not introduce a second palette. The dashboard pages have their own systems;
+Read them off `:root` in `index.html`, which is the source of truth if this
+drifts again. Do not introduce a second palette. The dashboard pages have their own systems;
 they are a different repo now and their tokens do not apply here.
 
 ## Asset rules

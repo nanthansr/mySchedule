@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" width="900" height="400" role="img" aria-label="Three lanes. Record: the agent runs N times on the PR branch, a DecisionRecorder marks which steps actually made a stochastic decision, the rest are dropped because replaying them is provably a no-op, and LangGraph leaves a checkpoint before every step. Replay: rewind to the checkpoint before step k, re-roll that one decision and let everything downstream run fresh, repeat round-robin so every candidate step gets the same number of samples, and read off the shift in failure rate per step. Gate: compare the observed rate against the baseline committed in .culprit/baseline.json, and only if it regressed does attribution run and the process exit 1 with a markdown report for the pull request.">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#8c959f"/></marker></defs>
+<rect width="900" height="400" fill="#ffffff"/>
+<rect x="0" y="8" width="900" height="108" rx="8" fill="#f6f8fa"/>
+<text x="16" y="28" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="600" fill="#a0a8b0" letter-spacing="1.4">RECORD</text>
+<rect x="0" y="126" width="900" height="108" rx="8" fill="#f6f8fa"/>
+<text x="16" y="146" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="600" fill="#a0a8b0" letter-spacing="1.4">REPLAY</text>
+<rect x="0" y="244" width="900" height="148" rx="8" fill="#f6f8fa"/>
+<text x="16" y="264" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="600" fill="#a0a8b0" letter-spacing="1.4">GATE</text>
+<rect x="96" y="40" width="168" height="46" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+<text x="180.0" y="56.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="600" fill="#1f2328">Agent run</text>
+<text x="180.0" y="70.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="10.5" font-weight="400" fill="#656d76">PR branch, N runs</text>
+<rect x="320" y="40" width="150" height="46" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+<text x="395.0" y="56.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="600" fill="#1f2328">DecisionRecorder</text>
+<text x="395.0" y="70.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="10.5" font-weight="400" fill="#656d76">which steps rolled?</text>
+<rect x="534" y="40" width="150" height="46" rx="6" fill="#fff4ec" stroke="#e8b48c" stroke-width="1"/>
+<text x="609.0" y="56.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="600" fill="#bd5d1f">Candidate steps</text>
+<text x="609.0" y="70.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="10.5" font-weight="400" fill="#656d76">no-op steps dropped</text>
+<rect x="748" y="40" width="110" height="46" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+<text x="803.0" y="56.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="600" fill="#1f2328">Checkpoints</text>
+<text x="803.0" y="70.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="10.5" font-weight="400" fill="#656d76">one before each</text>
+<rect x="96" y="158" width="168" height="46" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+<text x="180.0" y="174.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="600" fill="#1f2328">Rewind to step k</text>
+<text x="180.0" y="188.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="10.5" font-weight="400" fill="#656d76">LangGraph checkpoint</text>
+<rect x="320" y="158" width="150" height="46" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+<text x="395.0" y="174.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="600" fill="#1f2328">Re-roll step k</text>
+<text x="395.0" y="188.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="10.5" font-weight="400" fill="#656d76">downstream runs fresh</text>
+<rect x="534" y="158" width="150" height="46" rx="6" fill="#fff4ec" stroke="#e8b48c" stroke-width="1"/>
+<text x="609.0" y="174.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="600" fill="#bd5d1f">K times, round-robin</text>
+<text x="609.0" y="188.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="10.5" font-weight="400" fill="#656d76">equal samples per step</text>
+<rect x="748" y="158" width="110" height="46" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+<text x="803.0" y="174.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="600" fill="#1f2328">Effect</text>
+<text x="803.0" y="188.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="10.5" font-weight="400" fill="#656d76">shift in fail rate</text>
+<rect x="96" y="282" width="168" height="46" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+<text x="180.0" y="298.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="600" fill="#1f2328">Baseline</text>
+<text x="180.0" y="312.0" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="400" fill="#656d76">.culprit/baseline.json</text>
+<rect x="320" y="282" width="150" height="46" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+<text x="395.0" y="298.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="600" fill="#1f2328">Regressed?</text>
+<text x="395.0" y="312.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="10.5" font-weight="400" fill="#656d76">rate vs baseline</text>
+<rect x="534" y="282" width="150" height="46" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+<text x="609.0" y="298.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="600" fill="#1f2328">attribute()</text>
+<text x="609.0" y="312.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="10.5" font-weight="400" fill="#656d76">rank the candidates</text>
+<rect x="748" y="282" width="110" height="46" rx="6" fill="#fff4ec" stroke="#e8b48c" stroke-width="1"/>
+<text x="803.0" y="298.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="600" fill="#bd5d1f">exit 1</text>
+<text x="803.0" y="312.0" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="400" fill="#656d76">+ report.md</text>
+<path d="M 264 63 L 316 63" stroke="#8c959f" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+<path d="M 470 63 L 530 63" stroke="#8c959f" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+<path d="M 684 63 L 744 63" stroke="#8c959f" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+<path d="M 264 181 L 316 181" stroke="#8c959f" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+<path d="M 470 181 L 530 181" stroke="#8c959f" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+<path d="M 684 181 L 744 181" stroke="#8c959f" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+<path d="M 264 305 L 316 305" stroke="#8c959f" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+<path d="M 470 305 L 530 305" stroke="#8c959f" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+<path d="M 684 305 L 744 305" stroke="#8c959f" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+<path d="M 609 86 L 609 154" stroke="#8c959f" stroke-width="1.4" fill="none" marker-end="url(#a)" stroke-dasharray="4 3"/>
+<path d="M 803 204 L 803 254 L 609 254 L 609 278" stroke="#8c959f" stroke-width="1.4" fill="none" marker-end="url(#a)" stroke-dasharray="4 3"/>
+<text x="619" y="119" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="400" fill="#656d76">only these get replayed</text>
+<text x="619" y="246" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="400" fill="#656d76">effects feed the ranking</text>
+<text x="478" y="298" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="400" fill="#656d76">no</text>
+<text x="96" y="348" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="11" fill="#656d76"><tspan fill="#bd5d1f" font-weight="600">Replay is the expensive half,</tspan> so it only runs once the gate has already tripped. A clean branch never pays for it.</text>
+</svg>

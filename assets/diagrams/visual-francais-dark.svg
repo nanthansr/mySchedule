@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 268" width="900" height="268" role="img" aria-label="French text is pasted into a vanilla JavaScript page in the browser. Clicking a word sends it to a small Python proxy, which holds the Anthropic API key so it never reaches the client, and calls the Anthropic API. An image association comes back and renders beside the word instead of an English translation. Four Playwright end-to-end tests, written in French, drive the whole path.">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#6e7681"/></marker></defs>
+<rect width="900" height="268" fill="#0d1117"/>
+<rect x="0" y="8" width="900" height="150" rx="8" fill="#12171e"/>
+<text x="16" y="28" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="600" fill="#5a626b" letter-spacing="1.4">REQUEST</text>
+<rect x="96" y="42" width="160" height="46" rx="6" fill="#161b22" stroke="#3d444d" stroke-width="1"/>
+<text x="176.0" y="58.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="600" fill="#e6edf3">French text</text>
+<text x="176.0" y="72.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="10.5" font-weight="400" fill="#9198a1">click any word</text>
+<rect x="310" y="42" width="160" height="46" rx="6" fill="#2b1d12" stroke="#6b4426" stroke-width="1"/>
+<text x="390.0" y="58.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="600" fill="#e8955a">Python proxy</text>
+<text x="390.0" y="72.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="10.5" font-weight="400" fill="#9198a1">key stays server-side</text>
+<rect x="524" y="42" width="160" height="46" rx="6" fill="#161b22" stroke="#3d444d" stroke-width="1"/>
+<text x="604.0" y="58.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="600" fill="#e6edf3">Anthropic API</text>
+<text x="604.0" y="72.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="10.5" font-weight="400" fill="#9198a1">word to association</text>
+<rect x="738" y="42" width="110" height="46" rx="6" fill="#161b22" stroke="#3d444d" stroke-width="1"/>
+<text x="793.0" y="58.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="600" fill="#e6edf3">Image</text>
+<text x="793.0" y="72.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="10.5" font-weight="400" fill="#9198a1">no translation</text>
+<rect x="96" y="200" width="374" height="46" rx="6" fill="#161b22" stroke="#3d444d" stroke-width="1"/>
+<text x="283.0" y="216.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="600" fill="#e6edf3">Vanilla JS in the browser</text>
+<text x="283.0" y="230.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="10.5" font-weight="400" fill="#9198a1">no framework, no build step</text>
+<rect x="524" y="200" width="324" height="46" rx="6" fill="#161b22" stroke="#3d444d" stroke-width="1"/>
+<text x="686.0" y="216.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="600" fill="#e6edf3">Playwright</text>
+<text x="686.0" y="230.0" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="10.5" font-weight="400" fill="#9198a1">four end-to-end tests, written in French</text>
+<path d="M 256 65 L 306 65" stroke="#6e7681" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+<path d="M 470 65 L 520 65" stroke="#6e7681" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+<path d="M 684 65 L 734 65" stroke="#6e7681" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+<path d="M 283 196 L 283 100" stroke="#6e7681" stroke-width="1.4" fill="none" marker-end="url(#a)" stroke-dasharray="4 3"/>
+<path d="M 686 196 L 686 100" stroke="#6e7681" stroke-width="1.4" fill="none" marker-end="url(#a)" stroke-dasharray="4 3"/>
+<text x="291" y="150" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="400" fill="#9198a1">renders the result</text>
+<text x="694" y="150" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="400" fill="#9198a1">drives the whole path</text>
+</svg>
