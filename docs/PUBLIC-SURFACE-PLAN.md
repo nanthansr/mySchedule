@@ -231,8 +231,8 @@ Shipped and live.
 | 3 Writing section | done - 7 Hashnode posts, Substack slot left open |
 | 4 AI readability | done - `llms.txt`, `robots.txt`, `sitemap.xml`, 7 JSON-LD blocks |
 | 5 Profile README | done - Culprit added, post URLs live |
-| 6 Ledger | `audit-visibility.sh` written; 5 of 6 drifts fixed |
-| 7 Verify | `verify-surface.sh` written and passing bar one item |
+| 6 Ledger | done - `audit-visibility.sh` exits 0, all 6 drifts resolved |
+| 7 Verify | done - `verify-surface.sh` exits 0 against the live site |
 
 Design change made along the way: the five-second auto-cycling project carousel
 was replaced with a static grid. It gave a reader five seconds per project, kept
@@ -253,12 +253,8 @@ Also fixed in passing: `assets/diagrams/build.py` could not run on Windows
    The README's documented quickstart exits 2 until it lands, and the sample
    output shown beneath it is not something the tool can currently produce. The
    LinkedIn post waits on this.
-2. **Delete the `YTMusicUltimate` fork.** Needs a scope this session does not have:
-   `gh auth refresh -h github.com -s delete_repo` then
-   `gh repo delete nanthansr/YTMusicUltimate --yes`. Until then
-   `audit-visibility.sh` exits 1.
-3. **A `culprit`-gates-`culprit` CI workflow**, the way `01-gavel` gates itself.
+2. **A `culprit`-gates-`culprit` CI workflow**, the way `01-gavel` gates itself.
    Deferred until `attribute()` works - running it on the strawman would demo the
    tool convicting the wrong step on every PR.
-4. **Substack.** `substack.com/@nanthan` is a reader profile with no publication.
+3. **Substack.** `substack.com/@nanthan` is a reader profile with no publication.
    `data/posts.json` takes it as one line whenever it exists.
