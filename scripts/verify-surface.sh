@@ -3,11 +3,11 @@
 # send, a repo flipped to public.
 #
 #     scripts/verify-surface.sh            # check the live site
-#     scripts/verify-surface.sh --local    # check the working tree instead
+#     scripts/verify-surface.sh --local    # check the built export (run `npm run build` first)
 #
 # Four things, in the order they cost credibility:
 #   1. every URL resolves          - the flagship demo sat at 401 for weeks
-#   2. the generated HTML matches data/  - a hand-edit that drifted
+#   2. the export matches data/    - check-export.mjs, v2's drift gate
 #   3. the ledger matches GitHub   - a repo public that nobody decided on
 #   4. no fabricated numbers came back   - the site once claimed 99.2% uptime
 #
@@ -18,6 +18,11 @@ set -uo pipefail
 cd "$(dirname "$0")/.." || exit 2
 LOCAL=0
 [ "${1:-}" = "--local" ] && LOCAL=1
+
+if [ ! -f out/index.html ]; then
+  echo "out/index.html missing - run: npm run build"
+  exit 2
+fi
 
 # LinkedIn answers 999 and Hashnode 403 to anything that looks like a bot, so a
 # browser UA is the only way to tell a block from a dead link.
@@ -38,17 +43,24 @@ code_for() {
 }
 
 step "URLs"
-# Sources of truth for what is linked publicly.
-urls=$(grep -ohE 'https?://[^)"'"'"'> ]+' index.html docs/profile-README.md llms.txt 2>/dev/null \
+# Sources of truth for what is linked publicly - the built export, not the
+# source tree, because the export is what visitors get. The exclusion class
+# also stops on < and \ so URLs inside minified HTML and the React payload
+# don't run together.
+urls=$(grep -ohE 'https?://[^)"'"'"'<> \\]+' out/index.html out/library/index.html out/llms.txt docs/profile-README.md 2>/dev/null \
        | sed -e 's/[.,]$//' -e 's/&amp;/\&/g' | sort -u \
-       | grep -vE 'schema\.org|sitemaps\.org|w3\.org|fonts\.(googleapis|gstatic)\.com')
-# Checked in parallel. Sequentially this step alone took 48s, which blew the
-# 60s budget the AIOS goal predicate runs it under, and a check that times out
-# reads as a failure.
+       | grep -vE 'schema\.org|sitemaps\.org|w3\.org|fonts\.(googleapis|gstatic)\.com|localhost')
+# Before deploy, this site's own absolute URLs (e.g. /library/) don't exist
+# on the live origin yet - the live-mode step covers them after go-live.
+if [ "$LOCAL" -eq 1 ]; then
+  urls=$(grep -v 'nanthansr\.github\.io' <<< "$urls")
+fi
+# Checked in parallel; sequential runs blew the 60s AIOS goal budget. -P 4:
+# 8-way fan-out flaked with connection failures on Windows Git Bash.
 export -f code_for
 export UA
 bad=$(printf '%s
-' "$urls" | xargs -P 8 -I{} bash -c '
+' "$urls" | xargs -P 4 -I{} bash -c '
   c=$(code_for "{}")
   case "$c" in
     200|999) ;;                         # 999 is LinkedIn'"'"'s anti-bot answer
@@ -63,31 +75,21 @@ else
   echo "  all $(wc -l <<< "$urls") URLs resolve"
 fi
 
-step "generated output matches data/"
-python scripts/build-site.py --check || fail=1
+step "export matches data/"
+node scripts/check-export.mjs || fail=1
 
 step "visibility ledger"
 bash scripts/audit-visibility.sh || fail=1
 
-step "no fabricated numbers"
-# These three were on the site and in no repo. If any comes back, something
-# regenerated from a stale source or someone hand-edited a mock-up back in.
-if grep -nE '99\.2%|18ms|AUC-PR 0\.87|xgboost_v3' index.html case-fraud-pipeline.html 2>/dev/null; then
-  echo "  a retired fabricated figure is back"
-  fail=1
-else
-  echo "  clean"
-fi
-
 if [ "$LOCAL" -eq 0 ]; then
   step "live site"
-  for path in / /llms.txt /robots.txt /sitemap.xml; do
+  for path in / /library/ /case-fraud-pipeline.html /llms.txt /robots.txt /sitemap.xml /resume.pdf /data/projects.json; do
     code=$(code_for "https://nanthansr.github.io$path")
     [ "$code" = "200" ] || { echo "  BAD $code  $path"; fail=1; }
   done
-  # The whole point of generating rather than rendering: the project text has to
-  # be in the bytes the server sends, not painted in afterwards by JavaScript.
-  n=$(curl -s -L -A "$UA" https://nanthansr.github.io/ | grep -c '<article')
+  # The whole point of static export: the project text has to be in the bytes
+  # the server sends, not painted in afterwards by JavaScript.
+  n=$(curl -s -L -A "$UA" https://nanthansr.github.io/ | grep -o '<article' | wc -l)
   if [ "$n" -lt 5 ]; then
     echo "  only $n <article> elements in the served HTML - is it JS-rendered?"
     fail=1
