@@ -42,15 +42,26 @@ step "URLs"
 urls=$(grep -ohE 'https?://[^)"'"'"'> ]+' index.html docs/profile-README.md llms.txt 2>/dev/null \
        | sed -e 's/[.,]$//' -e 's/&amp;/\&/g' | sort -u \
        | grep -vE 'schema\.org|sitemaps\.org|w3\.org|fonts\.(googleapis|gstatic)\.com')
-while read -r u; do
-  [ -z "$u" ] && continue
-  code=$(code_for "$u")
-  case "$code" in
-    200|999) : ;;                       # 999 is LinkedIn's anti-bot answer
-    *) echo "  BAD $code  $u"; fail=1 ;;
+# Checked in parallel. Sequentially this step alone took 48s, which blew the
+# 60s budget the AIOS goal predicate runs it under, and a check that times out
+# reads as a failure.
+export -f code_for
+export UA
+bad=$(printf '%s
+' "$urls" | xargs -P 8 -I{} bash -c '
+  c=$(code_for "{}")
+  case "$c" in
+    200|999) ;;                         # 999 is LinkedIn'"'"'s anti-bot answer
+    *) echo "  BAD $c  {}" ;;
   esac
-done <<< "$urls"
-[ "$fail" -eq 0 ] && echo "  all $(wc -l <<< "$urls") URLs resolve"
+')
+if [ -n "$bad" ]; then
+  printf '%s
+' "$bad"
+  fail=1
+else
+  echo "  all $(wc -l <<< "$urls") URLs resolve"
+fi
 
 step "generated output matches data/"
 python scripts/build-site.py --check || fail=1
