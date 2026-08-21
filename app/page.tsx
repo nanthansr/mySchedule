@@ -9,10 +9,20 @@ import { Life } from "@/components/sections/Life";
 import { Projects } from "@/components/sections/Projects";
 import { Skills } from "@/components/sections/Skills";
 import { Writing } from "@/components/sections/Writing";
+import { getProjects, getWriting } from "@/lib/data";
+import { jsonLdBlocks } from "@/lib/jsonld";
 
 export default function Home() {
+  const blocks = jsonLdBlocks(getProjects(), getWriting());
   return (
     <>
+      {blocks.map((block, i) => (
+        <script
+          key={i}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(block) }}
+        />
+      ))}
       <Nav />
       <div className="content">
         <Hero />

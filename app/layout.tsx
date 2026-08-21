@@ -19,9 +19,27 @@ const dmMono = DM_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://nanthansr.github.io"),
   title: "Nanthan SR — Engineer by degree. Explorer by nature.",
   description:
     "Nanthan SR — backend and ML engineer in Montréal. MSc Applied Computer Science, Concordia. I ship systems end to end, not notebooks.",
+  authors: [{ name: "Nanthan SR" }],
+  alternates: { canonical: "/" },
+  robots: { index: true, follow: true },
+  openGraph: {
+    title: "Nanthan SR",
+    description: "Engineer by degree. Explorer by nature.",
+    type: "website",
+    url: "/",
+    siteName: "Nanthan SR",
+    images: [
+      {
+        url: "/assets/og-image.png",
+        alt: "Nanthan SR — Backend and ML Engineer",
+      },
+    ],
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({
