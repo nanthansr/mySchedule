@@ -8,6 +8,30 @@ Montréal · MSc Applied Computer Science, Concordia (2026) · previously R&D En
 
 ---
 
+## Culprit - step-level attribution as a merge gate
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="img/culprit-dark.svg">
+  <img alt="Three lanes. Record: the agent runs N times on the PR branch, a DecisionRecorder marks which steps actually made a stochastic decision, the rest are dropped because replaying them is provably a no-op, and LangGraph leaves a checkpoint before every step. Replay: rewind to the checkpoint before step k, re-roll that one decision and let everything downstream run fresh, repeat round-robin so every candidate step gets the same number of samples, and read off the shift in failure rate per step. Gate: compare the observed rate against the baseline committed in .culprit/baseline.json, and only if it regressed does attribution run and the process exit 1 with a markdown report for the pull request." src="img/culprit-light.svg">
+</picture>
+
+An agent run is a chain of decisions. When it fails at step 7, step 7 is usually innocent - step 2 picked the wrong tool, steps 3 to 6 ran fine on bad data, and step 7 was the first that couldn't paper over it. **The trace records where the failure surfaced, not where it started.**
+
+So stop reading the trace and re-run it. Rewind to step k, let that one decision be made again, let everything downstream run fresh, repeat. If the failure rate moves, step k mattered. `git bisect` for a process that isn't deterministic.
+
+- **The technique isn't mine.** Counterfactual step replay was published as [Causal Agent Replay](https://arxiv.org/abs/2606.08275). **Where it runs is mine** - CAR is a debugger you reach for after noticing a failure; this is a merge gate that trips at PR time, while the author still has the context.
+- **LangGraph is load-bearing, not a résumé line.** You can only replay if you can rewind, and it checkpoints before every step. The project cannot exist without that one feature.
+- **A cheap pre-pass** drops steps that made no stochastic decision, because replaying them is provably a no-op.
+- **Round-robin budget spending**, so when the budget runs out every candidate has been sampled equally. Depth-first spending convicts whichever step happened to be measured well.
+- **Three exit codes**, because CI reads exactly one number: 0 clean, 1 regression attributed, 2 the tool itself is broken.
+- **The hard part is open and stated as such.** Resampling step k re-rolls everything after it, so `plan` inherits `pick_tool`'s entire effect and the two score identically. The strawman attributor takes the largest raw shift, scores ~58-71% against known ground truth, and never once reports that it is unsure. Being confidently wrong a third of the time is worse than the number suggests, and fixing it is the work in progress.
+
+[Repo](https://github.com/nanthansr/culprit)
+
+`Python` `LangGraph` `pytest` `GitHub Actions`
+
+---
+
 ## MLOps fraud detection pipeline
 
 <picture>
@@ -58,10 +82,13 @@ Currently learning Kubernetes and Terraform. Not claiming them as skills until t
 
 I write up the parts that went wrong, because those are the parts worth reading.
 
-- What I actually learned building a two-tier AWS architecture from scratch
-- Three bugs. One night. This is what DevOps actually looks like.
-- Before you touch AWS, you need to think like Linux
+- [What I actually learned building a two-tier AWS architecture from scratch](https://nandytriesthings.hashnode.dev/what-i-actually-learned-building-a-two-tier-aws-architecture-from-scratch)
+- [The frontend gauntlet: four errors, one evening, zero app code changed](https://nandytriesthings.hashnode.dev/the-frontend-gauntlet-four-errors-one-evening-zero-app-code-changed)
+- [Three bugs. One night. This is what DevOps actually looks like.](https://nandytriesthings.hashnode.dev/three-bugs-one-night-this-is-what-devops-actually-looks-like)
+- [Before you touch AWS, you need to think like Linux](https://nandytriesthings.hashnode.dev/before-you-touch-aws-you-need-to-think-like-linux)
+- [Why I abandoned "toy apps" for a two-tier architecture](https://nandytriesthings.hashnode.dev/why-i-abandoned-toy-apps-for-a-two-tier-architecture)
 
+Seven posts, all from early 2026. Dormant since March; starting again now.
 All at [nandytriesthings.hashnode.dev](https://nandytriesthings.hashnode.dev/).
 
 ---

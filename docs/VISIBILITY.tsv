@@ -1,9 +1,9 @@
 repo	now	target	action	tier	reason
 nanthansr	public	public	keep	profile	Profile README. The most-read thing Nanthan owns.
-mySchedule	public	public	rename	site	Becomes nanthansr.github.io so Pages serves at the bare root.
+nanthansr.github.io	public	public	keep	site	The portfolio. Renamed from mySchedule on 2026-08-04 so Pages serves it at the bare root. Also owns the visibility ledger, the README standard and the profile README source. docs/ and scripts/ are excluded from the published site in _config.yml.
 dashboard	-	private	create	private	Private daily pages split out of mySchedule. Job tracker, gap analysis, target companies. Must never be public.
 mlops-fraud-pipeline	public	public	showcase	showcase	Flagship. Only repo with real CI, Docker, MLflow history and a demo. Numbers are reproducible from the repo.
-scAnki	private	public	rename+publish	showcase	Becomes carnet-snap. Live at carnet-snap.onrender.com, 16 test files, FastAPI + Swift iOS client. BLOCKED until .env is purged from history and both keys are rotated.
+scAnki	private	private	defer	private	Was targeted for public release as carnet-snap. Still blocked on the same two things as 2026-08-06: .env is in the git history and both keys need rotating. Target flipped to private so the ledger stops claiming an intent nobody is acting on. Re-open when the purge and rotation actually happen. Deferred 2026-08-21.
 multipaste	public	private	private	hide	Real engineering (CGEventTap, echo suppression, Sparkle+EdDSA verified E2E) but the public README sold a product nobody could get: no GitHub release, no DMG, Gumroad 'link coming soon'. production-audit.md still lists 4 open P0s including telemetry-on-by-default against a landing page claiming none. Private until it is genuinely shippable. 2026-08-06.
 pomofocus	-	public	created	showcase	Native Swift menu bar app, builds clean, 5 tests, zero dependencies, no network calls, and it promises nothing it cannot deliver - the opposite of multipaste's problem. Fills the native-macOS slot. Created public 2026-08-06.
 learn-buddy	public	private	private	hide	One commit, an initial scaffold. README lists a team as [INSE Friend] / [Friend 3] / [Friend 4] - unfilled placeholders - and Nanthan is the only committer. 21 real tests and CI, but it cannot be presented as a shipped team project. 2026-08-06.
@@ -26,3 +26,7 @@ rapid-paste-buffer	private	private	keep	private	Unreleased, overlaps multipaste.
 azona-website	private	private	keep	private	Agency site. Azona is Tier 2, parked until after the Sept 3 exam.
 nandy-second-brain	private	private	keep	private	Personal knowledge vault.
 claude-dotfiles	private	private	keep	private	Machine config.
+culprit	public	public	showcase	showcase	A CI gate for LangGraph agents. Public 2026-08-20, the subject of the first LinkedIn post. MIT licensed, CI on 3.11-3.13, 12 tests passing. attribute() is still unimplemented and the README says so; the post waits on it. Added to the ledger 2026-08-21.
+AIOS	private	private	keep	private	The operating system itself - context files, decisions log, autopilot, goals. Holds personal and financial context. Never public.
+job-search	private	private	keep	private	Career-ops pipeline, CV source, tailored resumes, application tracker. Same class as dashboard: must never be public.
+n8n	private	private	keep	private	Automation workflows. Exports can carry credentials in node parameters; not public without an audit.
