@@ -1,11 +1,13 @@
-/* Library page chrome. Adapted from mint-playground's complete-shelf
+/* Shelf chrome, serving both /library (.library-page) and the home-page
+   embed (.shelf-embed). Adapted from mint-playground's complete-shelf
    globals.css (github.com/mintdotgg/mint-playground
    @ 331533abd5f74acebb36b3598e5c811e2f038901, MIT - see
    licenses/mint-playground.LICENSE). Changes: recolored from paper-cream
    to this site's dark identity, scoped to the page (no html/body rules),
    tick columns set inline per catalog size, reduced-motion block scoped. */
 
-.library-page {
+.library-page,
+.shelf-embed {
   --paper: #0b0b0e;
   --paper-deep: #101015;
   --paper-light: #17171d;
@@ -23,6 +25,55 @@
 .library-stage {
   position: relative;
   min-height: 100dvh;
+}
+
+/* Home-page embed: a fixed-height stage inside the normal document flow.
+   The engine sizes off the canvas, so the height here is the only knob. */
+.shelf-embed {
+  position: relative;
+  height: min(88dvh, 780px);
+  overflow: hidden;
+}
+.shelf-embed .press-experience {
+  height: 100%;
+}
+/* Vertical swipes must keep scrolling the page; horizontal drags browse. */
+.shelf-embed .shelf-canvas {
+  touch-action: pan-y;
+}
+
+/* The Projects | Writing switcher, floated over the stage on both routes. */
+.shelf-tabs {
+  position: absolute;
+  z-index: 20;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  background: rgba(11, 11, 14, 0.72);
+  backdrop-filter: blur(8px);
+}
+.shelf-tabs button {
+  border: 0;
+  border-radius: 999px;
+  padding: 7px 16px;
+  background: transparent;
+  color: var(--ink-soft);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.2s, background 0.2s;
+}
+.shelf-tabs button:hover { color: var(--ink); }
+.shelf-tabs button[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--paper);
 }
 
 .stage-teaser {
@@ -217,7 +268,8 @@
   opacity: 0.35;
 }
 
-.browse-caption h1 {
+.browse-caption h1,
+.browse-caption h3 {
   max-width: 420px;
   margin: 0;
   font-family: var(--serif);
@@ -784,7 +836,8 @@
     );
   }
   .browse-caption::before { display: none; }
-  .browse-caption h1 { max-width: 78vw; font-size: clamp(39px, 12.5vw, 58px); }
+  .browse-caption h1,
+  .browse-caption h3 { max-width: 78vw; font-size: clamp(39px, 12.5vw, 58px); }
   .browse-caption__author { font-size: 14px; }
   .inspect-button { margin-top: 18px; }
   .shelf-arrow { top: auto; bottom: 60px; width: 42px; height: 42px; }

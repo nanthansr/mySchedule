@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ShelfMount } from "@/components/library/ShelfMount";
-import { buildCatalog } from "@/lib/catalog";
-import "./library.css";
+import { ShelfShowcase } from "@/components/shelf/ShelfShowcase";
+import { buildShelfCatalogs } from "@/lib/catalog";
 
 export const metadata: Metadata = {
   title: "The Library — Nanthan SR",
@@ -12,7 +11,8 @@ export const metadata: Metadata = {
 };
 
 export default function LibraryPage() {
-  const books = buildCatalog();
+  const { projects, writing } = buildShelfCatalogs();
+  const books = [...projects, ...writing];
   const kindLabel = (format: string) =>
     format.startsWith("Project") ? "Project" : format;
 
@@ -27,12 +27,12 @@ export default function LibraryPage() {
           </p>
           <h1>The Library</h1>
           <p>
-            {books.length} volumes - every project and post on this site as a
-            book on one shelf. The interactive version needs JavaScript and
-            WebGL; the full list is just below.
+            {books.length} volumes - every project and post on this site as
+            books on two shelves, projects and writing. The interactive
+            version needs JavaScript and WebGL; the full list is just below.
           </p>
         </div>
-        <ShelfMount books={books} />
+        <ShelfShowcase projects={projects} writing={writing} variant="page" />
       </div>
 
       <section className="library-below" id="library-list">

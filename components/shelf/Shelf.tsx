@@ -31,7 +31,15 @@ function supportsWebGL(): boolean {
   }
 }
 
-export function Shelf({ books }: { books: CatalogBook[] }) {
+export type ShelfVariant = "page" | "embedded";
+
+export function Shelf({
+  books,
+  variant = "page",
+}: {
+  books: CatalogBook[];
+  variant?: ShelfVariant;
+}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const engineRef = useRef<ShelfEngine | null>(null);
   const [supported, setSupported] = useState(true);
@@ -61,15 +69,20 @@ export function Shelf({ books }: { books: CatalogBook[] }) {
       await document.fonts.ready;
       if (cancelled || !canvasRef.current) return;
 
-      engine = new ShelfEngine(canvasRef.current, books, {
-        onActiveIndex: setActiveIndex,
-        onMode: (nextMode, index) => {
-          setMode(nextMode);
-          setSelectedIndex(index);
+      engine = new ShelfEngine(
+        canvasRef.current,
+        books,
+        {
+          onActiveIndex: setActiveIndex,
+          onMode: (nextMode, index) => {
+            setMode(nextMode);
+            setSelectedIndex(index);
+          },
+          onStatus: setStatus,
+          onReady: () => setReady(true),
         },
-        onStatus: setStatus,
-        onReady: () => setReady(true),
-      });
+        { wheelMode: variant === "embedded" ? "horizontal-only" : "capture" },
+      );
       engineRef.current = engine;
     }
 
@@ -79,12 +92,17 @@ export function Shelf({ books }: { books: CatalogBook[] }) {
       engine?.dispose();
       engineRef.current = null;
     };
-  }, [books]);
+  }, [books, variant]);
 
   if (!supported) return null;
 
+  // On /library the shelf IS the page (<main>, page <h1>); embedded on the
+  // home page it is one section among many, so it must not claim either.
+  const Root = variant === "page" ? "main" : "div";
+  const CaptionHeading = variant === "page" ? "h1" : "h3";
+
   return (
-    <main
+    <Root
       className={`press-experience ${ready ? "is-ready" : ""} ${
         isFocused ? "is-focused" : "is-browsing"
       }`}
@@ -97,26 +115,28 @@ export function Shelf({ books }: { books: CatalogBook[] }) {
         aria-label={`Interactive three-dimensional shelf of ${books.length} volumes - Nanthan's projects and writing. Drag or use the arrow keys to browse. Press Enter to inspect the selected volume.`}
       />
 
-      <header className="site-header">
-        <Link
-          className="wordmark"
-          href="/"
-          aria-label={`${siteConfig.wordmark}, back to the portfolio`}
-        >
-          <span>{siteConfig.wordmark}</span>
-          <span className="wordmark__divider" />
-          <span>{siteConfig.collectionName}</span>
-        </Link>
-        <div className="header-actions">
-          <a className="list-cue" href="#library-list">
-            Plain list ↓
-          </a>
-          <div className="edition-mark">
-            <span>{books.length} VOLUMES</span>
-            <span>01 CONTINUOUS SHELF</span>
+      {variant === "page" ? (
+        <header className="site-header">
+          <Link
+            className="wordmark"
+            href="/"
+            aria-label={`${siteConfig.wordmark}, back to the portfolio`}
+          >
+            <span>{siteConfig.wordmark}</span>
+            <span className="wordmark__divider" />
+            <span>{siteConfig.collectionName}</span>
+          </Link>
+          <div className="header-actions">
+            <a className="list-cue" href="#library-list">
+              Plain list ↓
+            </a>
+            <div className="edition-mark">
+              <span>{books.length} VOLUMES</span>
+              <span>01 CONTINUOUS SHELF</span>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
+      ) : null}
 
       <section className="browse-caption" aria-hidden={isFocused}>
         <p className="eyebrow">
@@ -124,7 +144,7 @@ export function Shelf({ books }: { books: CatalogBook[] }) {
           <span className="eyebrow__line" />
           <span>{String(books.length).padStart(2, "0")}</span>
         </p>
-        <h1>{activeBook.shortTitle}</h1>
+        <CaptionHeading>{activeBook.shortTitle}</CaptionHeading>
         <p className="browse-caption__author">{activeBook.author}</p>
         <button
           type="button"
@@ -283,6 +303,6 @@ export function Shelf({ books }: { books: CatalogBook[] }) {
           ? `Inspecting ${selectedBook.title} by ${selectedBook.author}.`
           : `Selected ${activeBook.title} by ${activeBook.author}.`}
       </div>
-    </main>
+    </Root>
   );
 }

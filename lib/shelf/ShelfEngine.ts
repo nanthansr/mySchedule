@@ -30,6 +30,15 @@ import {
 } from "./cover-art";
 export type ShelfMode = "browse" | "focusing" | "inspect" | "returning";
 
+// "capture" (the /library full-page mode) owns the wheel outright;
+// "horizontal-only" (embedded on a scrolling page) lets vertical wheel
+// events pass through so the page keeps scrolling.
+export type WheelMode = "capture" | "horizontal-only";
+
+export type ShelfEngineOptions = {
+  wheelMode?: WheelMode;
+};
+
 type ShelfCallbacks = {
   onActiveIndex: (index: number) => void;
   onMode: (mode: ShelfMode, selectedIndex: number | null) => void;
@@ -185,15 +194,18 @@ export class ShelfEngine {
   private lastTimestamp = 0;
   private lastDiagnosticsAt = 0;
   private isDisposed = false;
+  private wheelMode: WheelMode = "capture";
 
   constructor(
     canvas: HTMLCanvasElement,
     books: CatalogBook[],
     callbacks: ShelfCallbacks,
+    options: ShelfEngineOptions = {},
   ) {
     this.canvas = canvas;
     this.booksData = books;
     this.callbacks = callbacks;
+    this.wheelMode = options.wheelMode ?? "capture";
     this.reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
@@ -597,6 +609,14 @@ export class ShelfEngine {
 
   private handleWheel = (event: WheelEvent) => {
     if (this.mode !== "browse") return;
+    // Embedded on a scrolling page, a vertical wheel must keep scrolling
+    // the page; only horizontal gestures browse the shelf.
+    if (
+      this.wheelMode === "horizontal-only" &&
+      Math.abs(event.deltaY) >= Math.abs(event.deltaX)
+    ) {
+      return;
+    }
     event.preventDefault();
     this.pendingFocusIndex = null;
     const dominant =

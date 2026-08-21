@@ -112,3 +112,17 @@ export function buildCatalog(): CatalogBook[] {
 
   return books;
 }
+
+// The two switchable shelves: project volumes vs. the writing collection
+// (the blog itself + every post). Same predicate the /library plain list
+// uses to label kinds.
+export function buildShelfCatalogs(): {
+  projects: CatalogBook[];
+  writing: CatalogBook[];
+} {
+  const books = buildCatalog();
+  return {
+    projects: books.filter((b) => b.format.startsWith("Project")),
+    writing: books.filter((b) => !b.format.startsWith("Project")),
+  };
+}
