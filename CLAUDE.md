@@ -3,119 +3,83 @@
 This directory owns **everything public-facing about Nanthan as an engineer**.
 Repo: `nanthansr/nanthansr.github.io`, served at <https://nanthansr.github.io/>.
 
-Renamed from `mySchedule` on 2026-08-04. The private daily-use pages moved to
-`../dashboard/` (repo `nanthansr/dashboard`, private, Cloudflare Access).
+v2 (2026-08-21): rebuilt from a hand-written static HTML site into a Next.js
+static export, on the `v2-next` branch. The last v1 commit is tagged
+`v1-static`; `docs/ROLLBACK.md` is the way back. The v1 CLAUDE.md said "no
+framework, no bundler" - that constraint was retired deliberately with this
+rebuild; do not resurrect it, and do not treat pre-v2 docs as current on
+stack questions.
 
 ## Scope: what this directory owns
 
-1. **The portfolio site** - `index.html` and the case-study pages.
+1. **The portfolio site** - the Next.js app (`app/`, `components/`, `lib/`), plus `public/case-fraud-pipeline.html`.
 2. **The GitHub profile README** - source of truth is `docs/profile-README.md`; `profile/` is a gitignored checkout of `nanthansr/nanthansr` that it gets copied into.
-3. **The visibility ledger** - `docs/VISIBILITY.tsv`. Every repo Nanthan owns, its public/private call, and the reason. Re-runnable, not a one-off decision.
+3. **The visibility ledger** - `docs/VISIBILITY.tsv`. Every repo Nanthan owns, its public/private call, and the reason.
 4. **The README standard** - `docs/repo-readme-standard.md`, applied to every showcase repo.
-5. **The asset pipeline** - `assets/diagrams/*.svg` and `assets/shots/*.png`, copied into each showcase repo's `docs/img/`.
+5. **The diagram pipeline** - `scripts/build-diagrams.py` renders the hand-authored SVG pairs into `public/assets/diagrams/`.
 
 If a task touches how Nanthan looks to a hiring manager, it belongs here.
 
 ## Positioning
 
 Audience is **hiring managers and recruiters first, build-in-public audience second**.
-Per `~/AIOS/context/priorities.md`, Tier 0 is a full-time backend/ML role at a $70k
-floor, measured in submissions sent. This surface exists to make those submissions land.
-
 Headline register: *"Backend and ML engineer. I ship systems end to end, not notebooks."*
+`JOB_TITLE` lives in `lib/site.ts`; changing it requires mirroring
+`docs/profile-README.md` in the same commit.
 
 ## The honesty rule
 
-**No metric appears in any README, page, or profile that is not reproducible from the repo.**
+**No metric appears in any page, README, or profile that is not reproducible from the repo.**
 
-This is the load-bearing rule. Nanthan has 2 stars and 2 followers. Portfolio formats
-that work for people with 60K-star repos - star charts, press logos, manifesto badges,
-follower counts - read as imitation when the proof underneath is absent, and that is
-worse than a plain honest page. Specificity is the substitute for scale:
-"284,807 transactions at a 577:1 imbalance, 2-5ms inference" beats any badge.
+Specificity is the substitute for scale: "284,807 transactions at a 577:1
+imbalance, 2-5ms inference" beats any badge. Corollaries:
 
-Corollaries:
-- Never claim a skill that is not demonstrated by a repo here. The existing line "not claiming Kubernetes and Terraform until they're solid" is the standard.
-- Never link a demo without checking it returns 200 first. The flagship demo sat at 401 for weeks.
-- State the gaps. "Zero tests" on multipaste is a stronger signal than silence.
+- Never claim a skill that is not demonstrated by a repo here.
+- Never link a demo or URL without checking it returns 200 first.
+- State the gaps. "No CI on this one" is a stronger signal than silence.
+- `scripts/check-export.mjs` greps every exported HTML file for retired fabricated figures; do not teach it exceptions.
 
-## Hard constraints (the site)
+## Stack and architecture (v2)
 
-- **No framework, no bundler.** Pure HTML/CSS/JS. Never suggest React, Vue, npm, webpack.
-- **No external JS libraries.** Vanilla JS only.
-- **No backend.** Client-side only.
-- **No TypeScript.** Plain `.js` inside `<script>` tags.
-- **No new files** unless clearly required. Prefer editing existing ones.
-- **Nothing that matters may be rendered by JavaScript.** Text painted in at
-  runtime is invisible to AI crawlers, text extractors and link-preview
-  scrapers. Generate it into the HTML instead.
+- Next.js (app router, `output: 'export'`), React, TypeScript, Tailwind 4, `motion` (Framer Motion), three.js (library page only), next-themes.
+- **All meaningful text must be in the exported HTML.** Content renders in server components at build time; client components are for interaction only. The export gate asserts this.
+- **One data file per content type**: `data/projects.json`, `posts.json`, `skills.json`, `experience.json`, `life.json`. Page sections render from these; never hand-edit content into components. `data/*.json` are also served publicly at `/data/` (synced by the prebuild hook) as a machine-readable feed.
+- The AI-readability surface (`llms.txt`, `robots.txt` with 12 named crawlers, `sitemap.xml`, 7 JSON-LD blocks) generates from the same data in `lib/` + `app/*/route.ts`.
+- Design tokens live in `:root` in `app/globals.css` (black `#000`, blue `#4B9EFF`, copper `#e8865a`, Space Grotesk + DM Mono via next/font). Do not introduce a second palette. The case study page keeps its own separate system on purpose.
+- The `/library` shelf engine (`lib/shelf/`) is adapted from mint-playground (MIT, commit-pinned headers, `licenses/mint-playground.LICENSE`). Never add Stripe-harvested assets to it; covers stay procedural. The gate greps for this.
 
 ## Adding a project
 
-Do not hand-edit the projects section of `index.html`. It is generated.
+1. Add a `DIAGRAMS` entry in `scripts/build-diagrams.py`, then `python scripts/build-diagrams.py`. Alt text is authored as the SVG's `aria-label`.
+2. Add an entry to `data/projects.json`. Every string in `facts` must be reproducible from the repo.
+3. `npm run build && node scripts/check-export.mjs`.
+4. Commit the JSON and the SVGs together. The library catalog picks the project up automatically (assign a motif in `lib/catalog.ts` if the default doesn't fit).
 
-1. Add a `DIAGRAMS` entry in `assets/diagrams/build.py`, then
-   `python assets/diagrams/build.py`. Real screenshot instead of a diagram is
-   fine; a fabricated mock-up is not.
-2. Add an entry to `data/projects.json`. Every string in `facts` must be
-   reproducible from the repo.
-3. `python scripts/build-site.py`.
-4. Commit the JSON, the SVGs and the regenerated files together.
+## Verification
 
-`python scripts/build-site.py --check` fails if the committed HTML has drifted
-from the data. The three markers - `projects`, `writing`, `jsonld` - delimit
-what the generator owns; everything else in `index.html` is hand-written.
-
-## Files
-
-| File | What |
-|---|---|
-| `index.html` | the portfolio (was `portfolio.html`) - black, blue accent with copper secondary |
-| `data/projects.json` | **every project on the site.** Adding a project starts and ends here |
-| `data/posts.json` | blog publications and posts |
-| `scripts/build-site.py` | turns those two files into HTML, `llms.txt`, `robots.txt`, `sitemap.xml` |
-| `case-fraud-pipeline.html` | deep technical walkthrough of the flagship |
-| `assets/diagrams/` | hand-authored SVG architecture diagrams |
-| `assets/shots/` | real screenshots, never mockups |
-| `assets/og-image.png` | social card, generated from the site itself |
-| `docs/` | the portfolio programme - never published (excluded in the deploy workflow) |
-
-### Design tokens for `index.html`
-
-```
---bg: #000000; --surface: #111111; --accent: #4B9EFF; --accent2: #e8865a;
---font-disp: 'Syne'; --font-body: 'Space Grotesk'; --font-mono: 'DM Mono'
-```
-
-Read them off `:root` in `index.html`, which is the source of truth if this
-drifts again. Do not introduce a second palette. The dashboard pages have their own systems;
-they are a different repo now and their tokens do not apply here.
-
-## Asset rules
-
-- Diagrams are **hand-authored SVG**, not exported images. They stay legible when scaled and diff cleanly in git.
-- Every diagram ships as a `<picture>` with a `prefers-color-scheme: dark` source so it reads on GitHub in both themes.
-- Screenshots are of **real running instances**. Never a mockup, never a doctored number.
-- Assets live here first, then get copied into the showcase repo under `docs/img/` so each repo is self-contained.
+- `npm run build` then `node scripts/check-export.mjs` - the machine gate (27 checks). CI runs it on every push.
+- `bash scripts/verify-surface.sh --local` - pre-publish gate: every public URL curl-checked, export gate, visibility ledger.
+- `bash scripts/verify-surface.sh` - same against the live site, after deploy.
 
 ## Deploy
 
-Because the repo is named `nanthansr.github.io`, **GitHub Pages serves the `main`
-branch root directly** at the bare root domain, with no path prefix and no deploy
-action involved. Push to `main` and it is live. That is the URL that goes on the resume.
-
-What gets published is controlled by `_config.yml`, not by a workflow. `docs`,
-`CLAUDE.md`, `README.md` and `.github` are in its `exclude` list, so they stay in
-git but never reach the site. **If you add anything to this repo that must not be
-public, add it to that list in the same commit.**
-
-The one workflow, `.github/workflows/deploy.yml`, only runs `html5validator`. It has
-no deploy step; an earlier `peaceiris/actions-gh-pages` step was removed because it
-published to a `gh-pages` branch that Pages was not reading.
+GitHub Pages serves via the **Actions workflow** (`.github/workflows/deploy.yml`)
+on pushes to `main` - build, gate, publish `out/`. Settings > Pages > Source
+must be "GitHub Actions" (flipped manually at v2 go-live). Only `out/` ships,
+so `docs/`, `scripts/`, and this file never reach the site - the gate asserts
+it. Rollback: `docs/ROLLBACK.md`.
 
 ## Never
 
-- Never publish anything from `../dashboard/`. It holds target-company lists, a gap analysis, and a live job tracker. That content leaked publicly for months before the 2026-08-04 split; do not undo it.
+- Never push or merge to `main` unattended. Nanthan reviews and pushes; push to `main` deploys the live site.
+- Never publish anything from `../dashboard/` (target-company lists, job tracker). That content leaked publicly for months before the 2026-08-04 split.
 - Never commit a secret. Run `gitleaks detect --no-git` before flipping any repo to public.
-- Never change a repo's visibility without recording the call and its reason in `docs/VISIBILITY.tsv`.
-- Never link a URL from the profile README without curling it first.
+- Never change a repo's visibility without recording the call in `docs/VISIBILITY.tsv`.
+- Never weaken `scripts/check-export.mjs` to make a build pass.
+
+## Logged follow-ups
+
+- **Case-study metrics audit**: `public/case-fraud-pipeline.html` section 05 shows `0.87 AUC-PR / 0.94 AUC-ROC / <20ms p95 / 100% CI coverage`, flagged in `docs/PUBLIC-SURFACE-PLAN.md` as unverified. The page shipped byte-identical through the v2 rebuild; audit those numbers against the repo and fix or remove them.
+- Optional: align `resume-backend.tex` headline ("Backend & Infrastructure Engineer") in the Automated Job Applications project with the site title, then re-export `public/resume.pdf`.
+- Optional: replace emoji icons (skills/life/contact) with SVG icons.
+- Orphaned diagram pairs (`multipaste`, `learn-buddy`) still render from `build-diagrams.py`; prune when convenient.
