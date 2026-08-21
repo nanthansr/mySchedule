@@ -475,7 +475,7 @@
   margin: 0;
   text-wrap: balance;
   font-family: var(--serif);
-  font-size: clamp(42px, 4.35vw, 70px);
+  font-size: clamp(32px, 3.2vw, 52px);
   font-weight: 440;
   letter-spacing: -0.055em;
   line-height: 0.91;
@@ -829,7 +829,7 @@
     padding: 25px 0 18px;
   }
   .book-details__copy .eyebrow { margin-bottom: 11px; }
-  .book-details h2 { max-width: 90%; font-size: clamp(35px, 10vw, 48px); }
+  .book-details h2 { max-width: 90%; font-size: clamp(28px, 8vw, 40px); }
   .book-details__author { margin-top: 10px; font-size: 14px; }
   .book-details__description { margin-top: 20px; font-size: 16px; }
   .book-details blockquote { margin-top: 21px; }
@@ -844,7 +844,7 @@
 @media (max-height: 700px) and (min-width: 761px) {
   .browse-caption { bottom: 94px; }
   .book-details__copy { padding-top: 18px; padding-bottom: 18px; }
-  .book-details h2 { font-size: clamp(38px, 4vw, 58px); }
+  .book-details h2 { font-size: clamp(30px, 3.4vw, 44px); }
   .book-details__description { margin-top: 20px; }
   .book-details blockquote,
   .book-details dl { margin-top: 20px; }

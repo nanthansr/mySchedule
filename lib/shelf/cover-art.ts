@@ -586,8 +586,6 @@ export function createSpineCover(book: CatalogBook) {
   addPaperGrain(ctx, logicalWidth, logicalHeight, `${book.id}-spine`);
 
   ctx.save();
-  ctx.fillStyle = book.accent;
-  ctx.fillRect(20, 24, 8, logicalHeight - 48);
   ctx.fillStyle = book.ink;
   ctx.translate(logicalWidth / 2 + 24, logicalHeight - 130);
   ctx.rotate(-Math.PI / 2);

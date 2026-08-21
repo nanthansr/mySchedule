@@ -314,7 +314,7 @@ export class ShelfEngine {
 
   private createBooks() {
     let cursor = 0;
-    const gap = 0.045;
+    const gap = 0.1; // inter-book spacing, world units - tune here
 
     this.booksData.forEach((book, index) => {
       cursor += book.thickness * 0.5;
