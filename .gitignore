@@ -3,3 +3,13 @@
 
 # gitignored checkout of nanthansr/nanthansr - source of truth is docs/profile-README.md
 profile/
+
+# Next.js
+/node_modules
+/.next/
+/out/
+*.tsbuildinfo
+next-env.d.ts
+
+# generated copy of data/ for the public feed - source of truth is /data
+/public/data/

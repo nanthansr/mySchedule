@@ -12,7 +12,7 @@ README in either theme. Copper accent carries over from the portfolio site.
 """
 import pathlib
 
-OUT = pathlib.Path(__file__).parent
+OUT = pathlib.Path(__file__).resolve().parent.parent / "public" / "assets" / "diagrams"
 
 THEMES = {
     "light": dict(
