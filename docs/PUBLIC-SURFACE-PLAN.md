@@ -217,3 +217,48 @@ Only then does the Culprit post go out.
 (`--accent: #c9773a`, Playfair Display / DM Sans) that `index.html` no longer uses
 (`--accent: #4B9EFF`, Syne / Space Grotesk), and it describes a `profile/`
 gitignored checkout. Fix in passing during step 5.
+
+---
+
+## Status - 2026-08-21
+
+Shipped and live.
+
+| Step | State |
+|---|---|
+| 1 Culprit to standard | done except the `attribute()` call below |
+| 2 Portfolio data-driven | done - `data/projects.json` + `scripts/build-site.py` |
+| 3 Writing section | done - 7 Hashnode posts, Substack slot left open |
+| 4 AI readability | done - `llms.txt`, `robots.txt`, `sitemap.xml`, 7 JSON-LD blocks |
+| 5 Profile README | done - Culprit added, post URLs live |
+| 6 Ledger | `audit-visibility.sh` written; 5 of 6 drifts fixed |
+| 7 Verify | `verify-surface.sh` written and passing bar one item |
+
+Design change made along the way: the five-second auto-cycling project carousel
+was replaced with a static grid. It gave a reader five seconds per project, kept
+its text in `data-` attributes only JS could read, linked to no repository at
+all, and got worse with every project added.
+
+Three fabricated figures were removed - `AUC-PR 0.87`, `18ms`, `99.2% uptime`.
+None appear anywhere in the repos they described. `verify-surface.sh` now fails
+if any of them returns.
+
+Also fixed in passing: `assets/diagrams/build.py` could not run on Windows
+(no explicit utf-8 encoding), and HTML validation had failed on every push since
+2026-08-06 because `assets/og-card.html` is a fragment, not a document.
+
+### Open
+
+1. **`attribute()` in `culprit/attribution.py`.** Nanthan's to write, deliberately.
+   The README's documented quickstart exits 2 until it lands, and the sample
+   output shown beneath it is not something the tool can currently produce. The
+   LinkedIn post waits on this.
+2. **Delete the `YTMusicUltimate` fork.** Needs a scope this session does not have:
+   `gh auth refresh -h github.com -s delete_repo` then
+   `gh repo delete nanthansr/YTMusicUltimate --yes`. Until then
+   `audit-visibility.sh` exits 1.
+3. **A `culprit`-gates-`culprit` CI workflow**, the way `01-gavel` gates itself.
+   Deferred until `attribute()` works - running it on the strawman would demo the
+   tool convicting the wrong step on every PR.
+4. **Substack.** `substack.com/@nanthan` is a reader profile with no publication.
+   `data/posts.json` takes it as one line whenever it exists.
