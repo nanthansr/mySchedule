@@ -25,6 +25,18 @@ UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Ge
 fail=0
 step() { printf "\n== %s\n" "$1"; }
 
+# One retry on a 5xx or a connection failure. GitHub Pages returns a transient
+# 503 often enough that without this the check flaps, and a gate that cries wolf
+# is a gate nobody reads.
+code_for() {
+  local c
+  c=$(curl -s -o /dev/null -w '%{http_code}' -L --max-time 20 -A "$UA" "$1")
+  case "$c" in
+    5??|000) sleep 3; c=$(curl -s -o /dev/null -w '%{http_code}' -L --max-time 20 -A "$UA" "$1") ;;
+  esac
+  printf '%s' "$c"
+}
+
 step "URLs"
 # Sources of truth for what is linked publicly.
 urls=$(grep -ohE 'https?://[^)"'"'"'> ]+' index.html docs/profile-README.md llms.txt 2>/dev/null \
@@ -32,7 +44,7 @@ urls=$(grep -ohE 'https?://[^)"'"'"'> ]+' index.html docs/profile-README.md llms
        | grep -vE 'schema\.org|sitemaps\.org|w3\.org|fonts\.(googleapis|gstatic)\.com')
 while read -r u; do
   [ -z "$u" ] && continue
-  code=$(curl -s -o /dev/null -w '%{http_code}' -L --max-time 20 -A "$UA" "$u")
+  code=$(code_for "$u")
   case "$code" in
     200|999) : ;;                       # 999 is LinkedIn's anti-bot answer
     *) echo "  BAD $code  $u"; fail=1 ;;
@@ -59,7 +71,7 @@ fi
 if [ "$LOCAL" -eq 0 ]; then
   step "live site"
   for path in / /llms.txt /robots.txt /sitemap.xml; do
-    code=$(curl -s -o /dev/null -w '%{http_code}' -L --max-time 20 "https://nanthansr.github.io$path")
+    code=$(code_for "https://nanthansr.github.io$path")
     [ "$code" = "200" ] || { echo "  BAD $code  $path"; fail=1; }
   done
   # The whole point of generating rather than rendering: the project text has to
