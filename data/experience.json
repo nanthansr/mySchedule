@@ -1,0 +1,66 @@
+{
+  "_comment": "Work history, volunteering, and education. Extracted 1:1 from the hand-written v1 index.html #experience section.",
+  "roles": [
+    {
+      "company": "Synopsys",
+      "role": "R&D Engineer",
+      "period": "Jul 2023 — Jun 2024 · Bangalore, India",
+      "bullets": [
+        "Engineered and optimized software tools in Python, C++, and PHP for a world-class EDA company.",
+        "Maintained production server, reducing downtime by 15%.",
+        "Debugged complex system architectures using reverse-engineering methods."
+      ]
+    },
+    {
+      "company": "Synopsys",
+      "role": "Technical Intern",
+      "period": "Jan 2023 — Jul 2023 · Bangalore, India",
+      "bullets": [
+        "Built automated reporting script, reducing root cause analysis time by 30%.",
+        "Improved error detection rates by 20% through QA initiatives.",
+        "Collaborated with senior engineers on feature integration."
+      ]
+    }
+  ],
+  "volunteering": {
+    "intro": "Not for a certificate. Not for a line on a resume. Because showing up for people — with no expectation of anything in return — is one of the few things that actually matters.",
+    "entries": [
+      {
+        "company": "Concordia Sustainability",
+        "role": "Campus Volunteer",
+        "period": "Sep 2024 — Sep 2025 · 13.78 hrs",
+        "size": "md",
+        "bullets": [
+          "Grey Nuns Garden — hands-on urban gardening on campus grounds.",
+          "Reuse Depot Support — helping divert waste and promote sustainable reuse.",
+          "Rooftop Gardening at the CJ Terrace — community growing space, summer 2025.",
+          "Community Bike Shop & Kitchen volunteering — showing up wherever needed."
+        ]
+      },
+      {
+        "company": "Multi-faith & Spirituality Centre",
+        "role": "Community Meals Food Prep",
+        "period": "2025 — 2026 · Concordia University",
+        "size": "sm",
+        "bullets": [
+          "Cook, prepare, and clean for monthly community meals open to all faiths and backgrounds.",
+          "Competencies: Collaboration, Communication, Multicultural Awareness, Social Responsibility."
+        ]
+      }
+    ]
+  },
+  "education": [
+    {
+      "degree": "Master of Applied Computer Science",
+      "school": "Concordia University, Montréal",
+      "meta": "Completed",
+      "detail": "Graduated May 2026"
+    },
+    {
+      "degree": "B.Tech — Computer Science & Engineering",
+      "school": "Amrita Vishwa Vidyapeetham, India",
+      "meta": "Graduated 2023",
+      "detail": "GPA 3.57 / 4.30"
+    }
+  ]
+}

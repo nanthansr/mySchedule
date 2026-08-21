@@ -1,0 +1,88 @@
+{
+  "_comment": "Beyond-the-code section. Extracted 1:1 from the hand-written v1 index.html #life section.",
+  "quote": "I am not just an engineer. I am someone who ice-skated alone in a Montréal winter, learned bachata from scratch, walked from Little Italy to Berri-UQAM, and cooked every single meal I've eaten this year. The code is part of it — not all of it.",
+  "bento": [
+    {
+      "id": "dance",
+      "size": "wide",
+      "icon": "🕺",
+      "title": "Dancer & Raver",
+      "desc": "Bachata, electronic music festivals, sweaty rooms with strangers — this is where I feel most alive. Piknik Électronik all summer. Igloo Fest in winter. Solo, always.",
+      "palette": "dance"
+    },
+    {
+      "id": "run",
+      "size": "reg",
+      "icon": "🏃",
+      "title": "Hybrid Athlete",
+      "desc": "Gym, running, hiking, calisthenics. Physical discipline is how I think clearly.",
+      "palette": "run"
+    },
+    {
+      "id": "lang",
+      "size": "half",
+      "icon": "🌍",
+      "title": "Language Collector",
+      "desc": "Tamil (native), English (advanced), French (B1). Languages unlock worlds.",
+      "palette": "lang"
+    },
+    {
+      "id": "cook",
+      "size": "half",
+      "icon": "🍳",
+      "title": "Home Cook",
+      "desc": "Every meal, from scratch. Meal prep is a meditation. Eats outside once every 2–3 months.",
+      "palette": "cook"
+    },
+    {
+      "id": "phil",
+      "size": "half",
+      "icon": "🧠",
+      "title": "Philosophy",
+      "desc": "Consciousness is the point of being human. Reads, journals, thinks deeply.",
+      "palette": "phil"
+    },
+    {
+      "id": "explore",
+      "size": "reg",
+      "icon": "✈️",
+      "title": "Explorer",
+      "desc": "India → Montréal. Montréal → Toronto (twice). Walks that last hours. New discomforts, always solo.",
+      "palette": "exp"
+    },
+    {
+      "id": "glitch",
+      "size": "wide",
+      "icon": "🎭",
+      "title": "The Happy Glitch",
+      "desc": "Documenting the honest version of a grad student life in Montréal. The solo adventures, the discipline, the waking up. Building in public, quietly, letting results speak.",
+      "palette": "glitch"
+    },
+    {
+      "id": "read",
+      "size": "wide",
+      "icon": "📖",
+      "title": "Reader",
+      "desc": "Biographies, philosophy, history, spirituality. Loves cultures and the \"why\" behind everything.",
+      "palette": "read"
+    }
+  ],
+  "journal": {
+    "label": "2025 — From the journal",
+    "sub": "10% of the actual list.",
+    "items": [
+      "Solo at Piknik Électronik, full pass, every weekend",
+      "Bachata introduction classes — from zero",
+      "Walked from Little Italy to Berri-UQAM",
+      "Started learning French — seriously",
+      "Self-taught ice skating in a Montréal winter",
+      "Travelled to Toronto — twice",
+      "Started reclaiming my habits",
+      "Martial arts trial class",
+      "Started content creation — The Happy Glitch",
+      "Fitness — every week, no exceptions",
+      "Every meal cooked from scratch, all year",
+      "Igloo Fest — solo, front row, fully alive"
+    ]
+  }
+}

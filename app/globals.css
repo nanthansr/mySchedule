@@ -222,7 +222,8 @@ body {
 .proj-grid { display: flex; flex-direction: column; gap: 5rem; }
 
 .proj-card { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 3rem; align-items: start; }
-.proj-card:nth-child(even) .proj-figure { order: 2; }
+/* alternation is set explicitly in JSX (Reveal wrappers break nth-child) */
+.proj-card-even .proj-figure { order: 2; }
 
 .proj-figure { margin: 0; border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); padding: 1.75rem; display: flex; align-items: center; justify-content: center; }
 .proj-figure img { width: 100%; height: auto; display: block; border-radius: 8px; }
@@ -409,7 +410,7 @@ body {
   .mgrid { grid-template-columns: 1fr 1fr; }
   .site-footer { flex-direction: column; gap: .75rem; text-align: center; }
   .proj-card { grid-template-columns: 1fr; gap: 1.75rem; }
-  .proj-card:nth-child(even) .proj-figure { order: 0; }
+  .proj-card-even .proj-figure { order: 0; }
   .proj-grid { gap: 3.5rem; }
   .proj-figure { padding: 1rem; }
   .writing-item { grid-template-columns: 1fr; gap: .3rem; }

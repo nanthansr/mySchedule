@@ -1,0 +1,45 @@
+{
+  "_comment": "Skills cards on the home page. Extracted 1:1 from the hand-written v1 index.html #skills section. title is an array of lines.",
+  "skills": [
+    {
+      "id": "cloud",
+      "icon": "☁️",
+      "label": "Infrastructure",
+      "title": ["Cloud &", "DevOps"],
+      "tags": ["GCP", "AWS", "Docker", "CI/CD", "Linux", "Git"],
+      "palette": "cloud"
+    },
+    {
+      "id": "ml",
+      "icon": "🤖",
+      "label": "Data & AI",
+      "title": ["Backend &", "ML Systems"],
+      "tags": ["FastAPI", "MLflow", "XGBoost", "Prometheus", "Grafana", "MLOps"],
+      "palette": "ml"
+    },
+    {
+      "id": "lang",
+      "icon": "⌨️",
+      "label": "Languages",
+      "title": ["Multilingual", "Coder"],
+      "tags": ["Python", "C++", "SQL", "Bash", "JavaScript", "Java"],
+      "palette": "lang"
+    },
+    {
+      "id": "tools",
+      "icon": "🛠️",
+      "label": "Practices",
+      "title": ["Tools &", "Workflows"],
+      "tags": ["Agile/Scrum", "Jira", "Swagger", "PostgreSQL", "OOP", "REST APIs"],
+      "palette": "tools"
+    },
+    {
+      "id": "cert",
+      "icon": "🎯",
+      "label": "In Progress",
+      "title": ["Certs &", "Learning"],
+      "tags": ["AWS SAA-C03", "NeetCode 150", "French B1→B2", "IaC"],
+      "palette": "cert"
+    }
+  ]
+}
