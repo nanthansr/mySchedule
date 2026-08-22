@@ -209,18 +209,14 @@ body {
 /* ════════════════════════════════════════════════════════════
    EXPERIENCE
 ════════════════════════════════════════════════════════════ */
-.exp-hdrs { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; margin-bottom: 1rem; }
-.exp-hdr { font-family: var(--font-body); font-size: 1.1rem; font-weight: 500; color: var(--text-d); letter-spacing: -0.01em; }
-.exp-hdr.on { color: var(--text-m); }
-.exp-rows { display: flex; flex-direction: column; }
-.exp-row { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; padding: 3rem 0; border-bottom: 1px solid rgba(255,255,255,0.07); position: relative; }
-.exp-row::before { content: ''; position: absolute; left: calc(50% - 5px); top: 3.3rem; width: 10px; height: 10px; border-radius: 50%; background: #000; border: 1px solid rgba(255,255,255,0.2); transition: border-color .2s, box-shadow .2s; }
-.exp-row:hover::before { border-color: var(--accent2); box-shadow: 0 0 12px rgba(232,134,90,0.4); }
-.exp-co { font-family: var(--font-body); font-size: 1.65rem; font-weight: 400; line-height: 1.1; margin-bottom: .3rem; letter-spacing: -0.01em; }
-.exp-co.exp-co-md { font-size: 1.3rem; }
-.exp-co.exp-co-sm { font-size: 1.15rem; }
-.exp-role { font-size: .88rem; font-weight: 500; color: var(--text-m); }
-.exp-per { font-size: .75rem; color: var(--text-d); margin-top: .2rem; font-family: var(--font-mono); }
+/* one vertical rail; entries hang off it with copper node dots */
+.timeline { position: relative; margin-left: 5px; padding-left: 2.4rem; border-left: 1px solid rgba(255,255,255,0.12); display: flex; flex-direction: column; gap: 3.25rem; }
+.tl-entry { position: relative; }
+.tl-entry::before { content: ''; position: absolute; left: calc(-2.4rem - 6px); top: .4rem; width: 11px; height: 11px; border-radius: 50%; background: var(--bg); border: 1px solid rgba(255,255,255,0.25); transition: border-color .2s, box-shadow .2s; }
+.tl-entry:hover::before { border-color: var(--accent2); box-shadow: 0 0 12px rgba(232,134,90,0.4); }
+.tl-co { font-family: var(--font-body); font-size: 1.35rem; font-weight: 400; line-height: 1.1; letter-spacing: -0.01em; margin: 0 0 .2rem; }
+.tl-role { color: var(--accent2); font-size: .88rem; font-weight: 500; margin: 0; }
+.tl-period { font-family: var(--font-mono); font-size: .72rem; color: var(--text-d); margin: .25rem 0 .9rem; }
 .ebulls { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .6rem; }
 .ebulls li { font-size: .85rem; color: var(--text-m); line-height: 1.7; display: flex; gap: .5rem; }
 .ebulls li::before { content: '—'; color: var(--text-d); flex-shrink: 0; }
@@ -330,9 +326,8 @@ body {
   .hero-name { font-size: clamp(1.8rem, 8vw, 3.2rem); }
   .split-section { grid-template-columns: 1fr; gap: 3rem; padding: 5rem 1.5rem; }
   .split-text p { max-width: none; }
-  .exp-hdrs { display: none; }
-  .exp-row { grid-template-columns: 1fr; gap: 1rem; }
-  .exp-row::before { display: none; }
+  .timeline { padding-left: 1.6rem; }
+  .tl-entry::before { left: calc(-1.6rem - 6px); }
   .edu-grid { grid-template-columns: 1fr; }
   .life-bento { grid-template-columns: 1fr 1fr; }
   .lb-wide, .lb-reg, .lb-half { grid-column: span 1; }

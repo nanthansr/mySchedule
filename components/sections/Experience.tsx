@@ -2,16 +2,12 @@ import { Reveal } from "@/components/Reveal";
 import { getExperience } from "@/lib/data";
 import type { ExperienceRole } from "@/lib/types";
 
-function ExpRow({ entry }: { entry: ExperienceRole }) {
-  const sizeClass =
-    entry.size === "md" ? " exp-co-md" : entry.size === "sm" ? " exp-co-sm" : "";
+function TimelineEntry({ entry }: { entry: ExperienceRole }) {
   return (
-    <div className="exp-row">
-      <div>
-        <div className={`exp-co${sizeClass}`}>{entry.company}</div>
-        <div className="exp-role">{entry.role}</div>
-        <div className="exp-per">{entry.period}</div>
-      </div>
+    <div className="tl-entry">
+      <h3 className="tl-co">{entry.company}</h3>
+      <p className="tl-role">{entry.role}</p>
+      <p className="tl-period">{entry.period}</p>
       <ul className="ebulls">
         {entry.bullets.map((bullet) => (
           <li key={bullet}>{bullet}</li>
@@ -35,14 +31,10 @@ export function Experience() {
           History.
         </h2>
       </Reveal>
-      <Reveal className="exp-hdrs">
-        <div className="exp-hdr on">Company</div>
-        <div className="exp-hdr">Details</div>
-      </Reveal>
-      <div className="exp-rows">
+      <div className="timeline">
         {roles.map((role) => (
           <Reveal key={`${role.company}-${role.role}`}>
-            <ExpRow entry={role} />
+            <TimelineEntry entry={role} />
           </Reveal>
         ))}
       </div>
@@ -51,9 +43,9 @@ export function Experience() {
         <span className="section-label">Community</span>
         <h3 className="vol-title">Volunteering</h3>
         <p className="vol-intro">{volunteering.intro}</p>
-        <div className="exp-rows">
+        <div className="timeline">
           {volunteering.entries.map((entry) => (
-            <ExpRow key={entry.company} entry={entry} />
+            <TimelineEntry key={entry.company} entry={entry} />
           ))}
         </div>
       </Reveal>
