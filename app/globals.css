@@ -246,6 +246,24 @@ body {
 ════════════════════════════════════════════════════════════ */
 .section-projects { max-width: 1200px; margin: 0 auto; padding: 0 5vw 8rem; }
 .section-lede { color: var(--text-m); font-size: .95rem; max-width: 620px; margin-bottom: 3.5rem; }
+.section-lede a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(75,158,255,0.35); padding-bottom: 1px; }
+
+/* ── WORK: the shelf's plain-text mirror (collapsed by default) ── */
+.work-list { margin-top: 2.5rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.25rem; }
+.work-list summary { font-family: var(--font-mono); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--text-d); cursor: pointer; }
+.work-list summary:hover { color: var(--text-m); }
+.work-item { margin-top: 2rem; max-width: 680px; }
+.work-item h3 { font-family: var(--font-body); font-size: 1.15rem; font-weight: 500; letter-spacing: -0.01em; margin-bottom: .3rem; }
+.work-item h3 a { color: var(--text); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 1px; }
+.work-item h3 a:hover { border-color: var(--accent); }
+.work-meta { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .06em; color: var(--text-d); margin-bottom: .55rem; }
+.work-summary { font-size: .88rem; color: var(--text-m); line-height: 1.7; }
+.work-facts { list-style: none; margin: .6rem 0 0; padding: 0; }
+.work-facts li { font-size: .8rem; color: var(--text-m); line-height: 1.7; padding-left: 1rem; position: relative; }
+.work-facts li::before { content: "→"; position: absolute; left: 0; color: var(--accent); font-size: .7rem; top: .2rem; }
+.work-links { margin-top: .6rem; }
+.work-links a { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--text); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.25); padding-bottom: 2px; margin-right: 1.2rem; }
+.work-links a:hover { border-color: var(--accent); }
 
 .proj-grid { display: flex; flex-direction: column; gap: 5rem; }
 

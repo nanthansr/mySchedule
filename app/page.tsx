@@ -7,6 +7,7 @@ import { Hero } from "@/components/sections/Hero";
 import { HeroCard } from "@/components/sections/HeroCard";
 import { Life } from "@/components/sections/Life";
 import { Projects } from "@/components/sections/Projects";
+import { ShelfSection } from "@/components/sections/ShelfSection";
 import { Skills } from "@/components/sections/Skills";
 import { Writing } from "@/components/sections/Writing";
 import { getProjects, getWriting } from "@/lib/data";
@@ -29,6 +30,7 @@ export default function Home() {
         <HeroCard />
         <Skills />
         <About />
+        <ShelfSection />
         <Projects />
         <Writing />
         <Experience />
