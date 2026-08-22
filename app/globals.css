@@ -183,6 +183,25 @@ body {
 .term-cursor { display: inline-block; width: 8px; height: 1em; background: rgba(255,255,255,0.8); vertical-align: text-bottom; animation: blink 1.1s step-end infinite; }
 @keyframes blink { 50% { opacity: 0; } }
 
+/* ── SKILL CHIPS + CONTRIBUTION GRAPH (compact About follow-ons) ── */
+.chips-section { max-width: 1200px; margin: 0 auto; padding: 0 5vw 6rem; }
+.chip-group { display: flex; align-items: baseline; gap: 1.4rem; padding: .8rem 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
+.chip-group-label { font-family: var(--font-mono); font-size: .64rem; letter-spacing: .18em; text-transform: uppercase; color: var(--text-d); flex: 0 0 9.5rem; }
+.chip-row { list-style: none; display: flex; flex-wrap: wrap; gap: .4rem; margin: 0; padding: 0; }
+.chip-row li { font-family: var(--font-mono); font-size: .66rem; letter-spacing: .04em; color: var(--text-m); border: 1px solid rgba(255,255,255,0.12); border-radius: 50px; padding: .2rem .6rem; }
+
+.contrib-section { padding-bottom: 6rem; }
+.contrib-section .chip-group-label { display: block; margin-bottom: .9rem; }
+.contrib-scroll { overflow-x: auto; scrollbar-width: none; }
+.contrib-scroll::-webkit-scrollbar { display: none; }
+.contrib-grid { display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, 10px); grid-auto-columns: 10px; gap: 3px; width: max-content; }
+.contrib-cell { width: 10px; height: 10px; border-radius: 2px; background: rgba(255,255,255,0.06); }
+.contrib-cell.l1 { background: rgba(75,158,255,0.28); }
+.contrib-cell.l2 { background: rgba(75,158,255,0.5); }
+.contrib-cell.l3 { background: rgba(75,158,255,0.75); }
+.contrib-cell.l4 { background: var(--accent); }
+.contrib-caption { font-family: var(--font-mono); font-size: .66rem; color: var(--text-d); margin-top: .8rem; }
+
 /* ════════════════════════════════════════════════════════════
    WORK — the embedded Library section
 ════════════════════════════════════════════════════════════ */
@@ -308,6 +327,19 @@ body {
 :root[data-theme="light"] .hero-bg { background: linear-gradient(170deg, #d4e8ff 0%, #e8d4f5 40%, #f5e8d4 100%); }
 :root[data-theme="light"] .terminal-mock { background: #1a1a1a; }
 :root[data-theme="light"] .mob-menu { background: rgba(245,245,240,0.98); }
+:root[data-theme="light"] .contrib-cell { background: rgba(0,0,0,0.07); }
+:root[data-theme="light"] .contrib-cell.l1 { background: rgba(75,158,255,0.3); }
+:root[data-theme="light"] .contrib-cell.l2 { background: rgba(75,158,255,0.5); }
+:root[data-theme="light"] .contrib-cell.l3 { background: rgba(75,158,255,0.75); }
+:root[data-theme="light"] .contrib-cell.l4 { background: var(--accent); }
+:root[data-theme="light"] .chip-group { border-bottom-color: rgba(0,0,0,0.08); }
+:root[data-theme="light"] .chip-row li { border-color: rgba(0,0,0,0.14); }
+:root[data-theme="light"] .timeline { border-left-color: rgba(0,0,0,0.14); }
+:root[data-theme="light"] .tl-entry::before { border-color: rgba(0,0,0,0.3); }
+:root[data-theme="light"] .work-list { border-top-color: rgba(0,0,0,0.1); }
+:root[data-theme="light"] .work-item h3 a { border-bottom-color: rgba(0,0,0,0.25); }
+:root[data-theme="light"] .work-links a { border-bottom-color: rgba(0,0,0,0.3); }
+:root[data-theme="light"] .ft-link { border-bottom-color: rgba(0,0,0,0.25); }
 
 /* ── REDUCED MOTION ──────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
