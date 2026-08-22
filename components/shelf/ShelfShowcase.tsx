@@ -68,25 +68,44 @@ export function ShelfShowcase({
 
   const books = tab === "projects" ? projects : writing;
 
-  return (
-    <div ref={hostRef} className={variant === "embedded" ? "shelf-embed" : undefined}>
-      <div className="shelf-tabs" role="group" aria-label="Choose a shelf">
-        <button
-          type="button"
-          aria-pressed={tab === "projects"}
-          onClick={() => setTab("projects")}
-        >
-          Projects
-        </button>
-        <button
-          type="button"
-          aria-pressed={tab === "writing"}
-          onClick={() => setTab("writing")}
-        >
-          Writing
-        </button>
+  const tabsControl = (
+    <div className="shelf-tabs" role="group" aria-label="Choose a shelf">
+      <button
+        type="button"
+        aria-pressed={tab === "projects"}
+        onClick={() => setTab("projects")}
+      >
+        Projects
+      </button>
+      <button
+        type="button"
+        aria-pressed={tab === "writing"}
+        onClick={() => setTab("writing")}
+      >
+        Writing
+      </button>
+    </div>
+  );
+
+  const mount = near ? (
+    <ShelfMount key={tab} books={books} variant={variant} />
+  ) : null;
+
+  // Embedded, the switcher lives in normal flow above the stage - overlaid
+  // at the stage top it would sit under the floating site nav.
+  if (variant === "embedded") {
+    return (
+      <div ref={hostRef} className="shelf-embed-wrap">
+        {tabsControl}
+        <div className="shelf-embed">{mount}</div>
       </div>
-      {near ? <ShelfMount key={tab} books={books} variant={variant} /> : null}
+    );
+  }
+
+  return (
+    <div ref={hostRef}>
+      {tabsControl}
+      {mount}
     </div>
   );
 }

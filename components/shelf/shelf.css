@@ -7,7 +7,8 @@
    tick columns set inline per catalog size, reduced-motion block scoped. */
 
 .library-page,
-.shelf-embed {
+.shelf-embed,
+.shelf-embed-wrap {
   --paper: #0b0b0e;
   --paper-deep: #101015;
   --paper-light: #17171d;
@@ -40,6 +41,15 @@
 /* Vertical swipes must keep scrolling the page; horizontal drags browse. */
 .shelf-embed .shelf-canvas {
   touch-action: pan-y;
+}
+
+/* Embedded: the switcher sits in flow above the stage, not overlaid. */
+.shelf-embed-wrap { background: none; }
+.shelf-embed-wrap .shelf-tabs {
+  position: static;
+  transform: none;
+  margin: 0 0 1.1rem;
+  width: max-content;
 }
 
 /* The Projects | Writing switcher, floated over the stage on both routes. */
