@@ -24,6 +24,7 @@ RockPaperScissors-JS	public	private	private	hide	2023 toy. 68-byte README.
 YTMusicUltimate	public	-	deleted	delete	A fork of someone else's iOS tweak. Contributed nothing and diluted the language stats - 196 MB of C on a profile pitching Python and ML. Deleted 2026-08-21.
 rapid-paste-buffer	private	private	keep	private	Unreleased, overlaps multipaste.
 azona-website	private	private	keep	private	Agency site. Azona is Tier 2, parked until after the Sept 3 exam.
+azona-site	private	private	keep	private	Second agency-site repo, found unrecorded by the 2026-08-21 audit. Recorded as-is (private). Open question for Nanthan: does this supersede azona-website or duplicate it?
 nandy-second-brain	private	private	keep	private	Personal knowledge vault.
 claude-dotfiles	private	private	keep	private	Machine config.
 culprit	public	public	showcase	showcase	A CI gate for LangGraph agents. Public 2026-08-20, the subject of the first LinkedIn post. MIT licensed, CI on 3.11-3.13, 12 tests passing. attribute() is still unimplemented and the README says so; the post waits on it. Added to the ledger 2026-08-21.

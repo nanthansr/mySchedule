@@ -39,7 +39,10 @@ export function ShelfShowcase({
   const [near, setNear] = useState(variant === "page");
 
   useEffect(() => {
-    setSupported(supportsWebGL());
+    const frame = requestAnimationFrame(() => {
+      if (!supportsWebGL()) setSupported(false);
+    });
+    return () => cancelAnimationFrame(frame);
   }, []);
 
   useEffect(() => {
