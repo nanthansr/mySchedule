@@ -53,7 +53,7 @@ export function Hero() {
           {JOB_TITLE}. Engineer by degree. Explorer by nature.
         </p>
         <div className="hero-btns">
-          <a href="#projects" className="btn-p">
+          <a href="#work" className="btn-p">
             See My Work
           </a>
           <a href="#contact" className="btn-g">

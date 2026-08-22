@@ -4,13 +4,8 @@ import Link from "next/link";
 
 const MENU_LINKS = [
   { href: "/#home", label: "Home" },
-  { href: "/#skills", label: "Skills" },
-  { href: "/#about", label: "About" },
-  { href: "/#projects", label: "Projects" },
-  { href: "/#writing", label: "Writing" },
+  { href: "/#work", label: "Work" },
   { href: "/#experience", label: "Experience" },
-  { href: "/#life", label: "Life" },
-  { href: "/library/", label: "Library" },
   { href: "/#contact", label: "Contact" },
 ];
 
@@ -31,14 +26,6 @@ export function MobileMenu({
           {link.label}
         </Link>
       ))}
-      <a
-        href="https://github.com/nanthansr"
-        target="_blank"
-        rel="noopener"
-        onClick={onClose}
-      >
-        GitHub
-      </a>
       <a
         href="/resume.pdf"
         target="_blank"

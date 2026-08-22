@@ -7,12 +7,8 @@ import { MobileMenu } from "@/components/MobileMenu";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 export const NAV_LINKS = [
-  { href: "/#skills", label: "Skills" },
-  { href: "/#about", label: "About" },
-  { href: "/#projects", label: "Projects" },
-  { href: "/#writing", label: "Writing" },
+  { href: "/#work", label: "Work" },
   { href: "/#experience", label: "Experience" },
-  { href: "/library/", label: "Library" },
   { href: "/#contact", label: "Contact" },
 ];
 
@@ -44,11 +40,6 @@ export function Nav() {
               <Link href={link.href}>{link.label}</Link>
             </li>
           ))}
-          <li>
-            <a href="https://github.com/nanthansr" target="_blank" rel="noopener">
-              GitHub
-            </a>
-          </li>
           <li>
             <a
               href="/resume.pdf"

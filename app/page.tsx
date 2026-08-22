@@ -4,12 +4,8 @@ import { Contact } from "@/components/sections/Contact";
 import { Experience } from "@/components/sections/Experience";
 import { Footer } from "@/components/sections/Footer";
 import { Hero } from "@/components/sections/Hero";
-import { HeroCard } from "@/components/sections/HeroCard";
 import { Life } from "@/components/sections/Life";
-import { Projects } from "@/components/sections/Projects";
 import { ShelfSection } from "@/components/sections/ShelfSection";
-import { Skills } from "@/components/sections/Skills";
-import { Writing } from "@/components/sections/Writing";
 import { getProjects, getWriting } from "@/lib/data";
 import { jsonLdBlocks } from "@/lib/jsonld";
 
@@ -27,12 +23,8 @@ export default function Home() {
       <Nav />
       <div className="content">
         <Hero />
-        <HeroCard />
-        <Skills />
         <About />
         <ShelfSection />
-        <Projects />
-        <Writing />
         <Experience />
         <Life />
         <Contact />
